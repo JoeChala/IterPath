@@ -9,3 +9,13 @@ export const connectDB_Student = async () => {
         process.exit(1);
     }
 };
+
+export const connectDB_Recruiter = async () => {
+    try{
+        const conn=await mongoose.connect(process.env.MONGO_URI_RECRUITER);
+        console.log("Student MongoDB connected");
+    }catch(error){
+        console.error(`Error: "${error.message}`);
+        process.exit(1);
+    }
+};
