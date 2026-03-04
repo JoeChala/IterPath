@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
-import {connectDB} from './config/db.js';
+import {connectDB_Student} from './config/db.js';
+//put your import here
 import recruiterRoutes from "./routes/recruiter.route.js"
 import studentRoutes from "./routes/student.route.js";
 import { initiateInvites } from "./controllers/utils.controller.js";
