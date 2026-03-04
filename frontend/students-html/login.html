@@ -6,17 +6,43 @@
     <body>
 
         <h2>Enter Registered Email</h2>
-        <input type="text" placeholder="Enter mail ID">
+        <input type="text" id="email" placeholder="Enter mail ID">
 
         <h2>Enter Password</h2>
-        <input type="text" placeholder="Enter Password">
+        <input type="text" id="password" placeholder="Enter Password">
 
-        <button onclick="location.href='dashboard.html'">Login</button>
+        <button onclick=loginStudent()>Login</button>
         
         <br><br><br>
 
         <h2>New Student?</h2>
         <button onclick="location.href='register.html'">Register Now</button>
 
+        <script>
+
+        async function loginStudent(){
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            const res = await fetch("http://localhost:5000/auth/students/login",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body: JSON.stringify({email,password})
+            });
+
+            const data = await res.json();
+
+            if(data.success){
+                 alert("Login successful");
+                 window.location.href = "dashboard.html";
+            }else{
+                alert(data.message);
+            }
+        }
+
+        </script>
     </body>
 </html>

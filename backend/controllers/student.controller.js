@@ -1,5 +1,38 @@
 import Student from "../models/student.model.js";
 
+export const loginStudent = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const student = await Student.findOne({ email });
+
+    if (!student) {
+      return res.status(404).json({
+        success: false,
+        message: "Student not found"
+      });
+    }
+
+    if (student.password !== password) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid password"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      data: student
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error"
+    });
+  }
+};
+
 export const getStudents = async (req,res)=>{
     try{
         const students=await Student.find({});
@@ -24,7 +57,7 @@ export const createStudent =async (req,res)=>{
         res.status(500).json({success:false,message:"Server Error"});
     }
 };
-
+/*
 export const deleteStudent=async (req,res)=>{
     const {id}=req.params;
     try{
@@ -47,3 +80,4 @@ export const updateStudent=async (req,res)=>{
         res.status(500).json({success:false,message:"Server error"});
     }
 };
+*/
