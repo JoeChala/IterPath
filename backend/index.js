@@ -19,6 +19,7 @@ app.use("/auth/recruiters",recruiterRoutes);
 app.post("/invites", initiateInvites);
 
 app.listen(5000,()=>{
-    connectDB();
+    connectDB_Student(); 
+    //Put yours here
     console.log(`Server started at http://localhost:${port}`);
 });
