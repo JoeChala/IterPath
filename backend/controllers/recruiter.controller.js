@@ -1,4 +1,4 @@
-import Recruiter from "../models/recruiter.model";
+import Recruiter from "../models/recruiter.model.js";
 
 export const completeProfile =  async (req,res) => {
     const data = req.body;
