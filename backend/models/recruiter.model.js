@@ -7,7 +7,7 @@ const recruiterSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: false
+        required: true
     },
     company: {
         type: String,
@@ -15,6 +15,18 @@ const recruiterSchema = new mongoose.Schema({
     },
     designation: {       // HR, dev, manager
         type: String,
+        enum: [
+            "HR Executive",
+            "HR Manager",
+            "Talent Acquisition Specialist",
+            "Talent Acquisition Manager",
+            "Campus Recruiter",
+            "Hiring Manager",
+            "Software Engineer",
+            "Senior Software Engineer",
+            "Engineering Manager",
+            "Other"
+        ],
         required: true,
     },
 }, {
