@@ -1,4 +1,4 @@
-import { sendEmail } from "./utils/sendEmail.js";
+import { sendEmail } from "../utils/sendEmail.js";
 
 export const initiateInvites = async (req, res) => {
   try {
