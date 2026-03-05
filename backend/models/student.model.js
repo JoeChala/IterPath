@@ -1,31 +1,12 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
+import { studentDB } from "../config/db.js";
 
 const studentSchema = new mongoose.Schema({
-    name:{
-        type: String,
-        required: true
-    },
-    usn:{
-        type:String,
-        required: true
-    },
-    email:{
-        type:String,
-        required: true
-    },
-    password:{
-        type:String,
-        required:true
-    },
-    resume:{
-        type:Object
-    }
-    },
-    {
-        timestamps: true,
-    }
-);
+  name: { type: String, required: true },
+  usn: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  resume: { type: Object }
+}, { timestamps: true });
 
-const Student=mongoose.model('Student', studentSchema);
-
-export default Student;
+export default studentDB.model("Student", studentSchema);

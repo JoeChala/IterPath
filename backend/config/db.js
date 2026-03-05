@@ -1,22 +1,26 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-export const connectDB_Student = async () => {
-    try{
-        const conn=await mongoose.connect(process.env.MONGO_URI_STUDENT);
-        console.log("Student MongoDB connected");
-    }catch(error){
-        console.error(`Error: "${error.message}`);
-        process.exit(1);
-    }
-};
+dotenv.config();
 
-export const connectDB_Recruiter = async () => {
-    try{
-        const conn=await mongoose.connect(process.env.MONGO_URI_RECRUITER);
-        console.log("Recruiter MongoDB connected");
-    }catch(error){
-        console.error(`Error: "${error.message}`);
-        process.exit(1);
-    }
-};
+// Student DB
+export const studentDB = mongoose.createConnection(process.env.MONGO_URI_STUDENT);
+
+studentDB.on("connected", () => {
+  console.log("Student MongoDB connected");
+});
+
+studentDB.on("error", (err) => {
+  console.error("Student DB error:", err);
+});
+
+// Recruiter DB
+export const recruiterDB = mongoose.createConnection(process.env.MONGO_URI_RECRUITER);
+
+recruiterDB.on("connected", () => {
+  console.log("Recruiter MongoDB connected");
+});
+
+recruiterDB.on("error", (err) => {
+  console.error("Recruiter DB error:", err);
+});
