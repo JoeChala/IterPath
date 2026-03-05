@@ -2,9 +2,18 @@ import mongoose from "mongoose";
 import { recruiterDB } from "../config/db.js";
 
 const recruiterSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  company: { type: String, required: true },
+  name: { 
+    type: String, 
+    required: true 
+  },
+  email: { 
+    type: String, 
+    required: true, 
+    unique: true },
+  company: { 
+    type: String, 
+    required: true 
+  },
   designation: {
     type: String,
     enum: [

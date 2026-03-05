@@ -2,8 +2,6 @@ import Recruiter from "../models/recruiter.model.js";
 
 export const completeProfile =  async (req,res) => {
     const data = req.body;
-    const contentLength = req.headers['content-length'];
-    console.log(contentLength);
     if(!data.name || !data.company || !data.designation) {
         return res.status(400).json({
             success: false,
