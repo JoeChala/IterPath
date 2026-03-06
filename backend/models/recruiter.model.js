@@ -11,8 +11,8 @@ const recruiterSchema = new mongoose.Schema({
     unique: true 
   },
   company: { 
-    type: String, 
-    required: true 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Company"
   },
   designation: {
     type: String,
