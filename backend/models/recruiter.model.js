@@ -1,15 +1,15 @@
 import mongoose from "mongoose";
-import { recruiterDB } from "../config/db.js";
 
 const recruiterSchema = new mongoose.Schema({
   name: { 
     type: String, 
-    required: true 
+    required: true, 
   },
   email: { 
     type: String, 
     required: true, 
-    unique: true },
+    unique: true 
+  },
   company: { 
     type: String, 
     required: true 
@@ -32,4 +32,4 @@ const recruiterSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-export default recruiterDB.model("Recruiter", recruiterSchema);
+export default mongoose.model("Recruiter", recruiterSchema);

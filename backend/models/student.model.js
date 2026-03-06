@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { studentDB } from "../config/db.js";
 
 const studentSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -9,4 +8,4 @@ const studentSchema = new mongoose.Schema({
   resume: { type: Object }
 }, { timestamps: true });
 
-export default studentDB.model("Student", studentSchema);
+export default mongoose.model("Student", studentSchema);
