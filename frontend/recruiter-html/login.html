@@ -42,14 +42,13 @@
                     headers:{
                         "Content-Type":"application/json"
                     },
-                    body: JSON.stringify({email,password})
+                    body: JSON.stringify({name,email,company,designation})
                 });
 
                 const data = await res.json();
 
                 if(data.success){
                     alert("Login successful");
-                    window.location.href = "dashboard.html";
                 }else{
                     alert(data.message);
                 }
