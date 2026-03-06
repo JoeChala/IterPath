@@ -11,22 +11,22 @@ const recruiterSchema = new mongoose.Schema({
     unique: true 
   },
   company: { 
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Company"
+    type: String,
+    require: true
   },
   designation: {
     type: String,
     enum: [
-      "HR Executive",
-      "HR Manager",
-      "Talent Acquisition Specialist",
-      "Talent Acquisition Manager",
-      "Campus Recruiter",
-      "Hiring Manager",
-      "Software Engineer",
-      "Senior Software Engineer",
-      "Engineering Manager",
-      "Other"
+      "hr-executive",
+      "hr-manager",
+      "talent-acquisition-specialist",
+      "talent-acquisition-manager",
+      "campus-recruiter",
+      "hiring-manager",
+      "software-engineer",
+      "senior-software-engineer",
+      "engineering-manager",
+      "other"
     ],
     required: true
   }

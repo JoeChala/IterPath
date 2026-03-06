@@ -2,7 +2,7 @@ import Recruiter from "../models/recruiter.model.js";
 
 export const completeProfile =  async (req,res) => {
     const data = req.body;
-    if(!data.name || !data.company || !data.designation) {
+    if(!data.name || !data.email || !data.company || !data.designation) {
         return res.status(400).json({
             success: false,
             message: "Please provide all the details!"
