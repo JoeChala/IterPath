@@ -22,8 +22,8 @@ function StudentRegisterForm() {
       body: JSON.stringify({ name, email, usn, password }),
     });
     const data = await res.json();
-    if(data.sucess){
-        alert(data.message || "Student Registered");
+    if(data.success){
+        alert("Student Registered");
         navigate("/dashboard");
     }
     else{

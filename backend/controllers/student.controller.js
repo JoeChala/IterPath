@@ -72,6 +72,7 @@ export const createStudent = async (req, res) => {
 
     res.status(201).json({
       success: true,
+      message: "Student Registered",
       data: newStudent
     });
 
