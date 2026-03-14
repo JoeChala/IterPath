@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function StudentLoginForm() {
-
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -19,7 +20,7 @@ function StudentLoginForm() {
 
     if(data.success){
       alert("Login successful");
-      window.location.href = "/dashboard";
+      navigate("/dashboard");
     }else{
       alert(data.message);
     }
@@ -37,7 +38,7 @@ function StudentLoginForm() {
 
       <h2>Enter Password</h2>
       <input
-        type="text"
+        type="password"
         placeholder="Enter Password"
         onChange={(e) => setPassword(e.target.value)}
       />
@@ -47,7 +48,7 @@ function StudentLoginForm() {
       <br /><br /><br />
 
       <h2>New Student?</h2>
-      <button onClick={() => window.location.href="/register"}>
+      <button onClick={() => navigate("/register")}>
         Register Now
       </button>
 
