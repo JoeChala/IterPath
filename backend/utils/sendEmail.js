@@ -1,30 +1,30 @@
 import nodemailer from "nodemailer";
 
-export const sendEmail = async ({ to, subject, html }) => {
-  try {
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,           
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,           
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
-    const mailOptions = {
+export default async function sendEmail(email, inviteLink) {
+  try{
+    await transporter.sendMail({
       from: `"IterPath" <${process.env.EMAIL_USER}>`,
-      to,
-      subject,
-      html,
-    };
-
-    const info = await transporter.sendMail(mailOptions);
-
-    console.log("Email sent:", info.response);
-
-  } catch (error) {
+      to: email,
+      subject: "Recruiter Invite",
+      html: `
+        <h2>You're invited to IterPath</h2>
+        <a href="${inviteLink}">
+          Accept Invite
+        </a>
+      `
+    });
+  }catch (error) {
     console.error("Error sending email:", error);
     throw new Error("Email could not be sent");
   }
-};
+}

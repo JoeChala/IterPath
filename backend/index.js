@@ -15,7 +15,8 @@ app.use(cors());
 
 app.use("/auth/students", studentRoutes);
 app.use("/auth/recruiters", recruiterRoutes);
-
+// /auth/admin    /student/complete-profile(resume, linkedin,github)  /job-posting(students + recruiter(own company + post job))  
+// /jobs/view/:<uuid>   /jobs/apply/:<uuid><-(apply button)   /
 app.post("/invites", initiateInvites);
 
 await connectDB();
