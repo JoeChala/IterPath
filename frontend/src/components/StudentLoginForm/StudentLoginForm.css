@@ -1,0 +1,171 @@
+/* ── Force dark mode variables ────────────────────────── */
+:root {
+  --card: #191919;
+  --ring: #737373;
+  --input: #525252;
+  --muted: #262626;
+  --accent: #404040;
+  --border: #383838;
+  --popover: #262626;
+  --primary: #737373;
+  --sidebar: #171717;
+  --secondary: #262626;
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --destructive: #ff6467;
+  --sidebar-ring: #525252;
+  --sidebar-accent: #262626;
+  --sidebar-border: #ffffff;
+  --card-foreground: #fafafa;
+  --sidebar-primary: #fafafa;
+  --muted-foreground: #a1a1a1;
+  --accent-foreground: #fafafa;
+  --popover-foreground: #fafafa;
+  --primary-foreground: #fafafa;
+  --sidebar-foreground: #fafafa;
+  --secondary-foreground: #fafafa;
+  --destructive-foreground: #262626;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-primary-foreground: #171717;
+  --font-sans: Geist Mono, monospace;
+}
+
+/* ── Page wrapper ─────────────────────────────────────── */
+.login-page {
+  min-height: 100vh;
+  background: var(--background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  padding: 1.5rem;
+}
+
+/* ── Card ─────────────────────────────────────────────── */
+.login-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  width: 100%;
+  max-width: 400px;
+  padding: 2.5rem;
+}
+
+/* ── Header ───────────────────────────────────────────── */
+.login-header {
+  margin-bottom: 2rem;
+}
+
+.login-eyebrow {
+  font-size: 1.5rem;        /* was 0.65rem */
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin: 0 0 0.5rem 0;
+}
+
+.login-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+/* ── Divider ──────────────────────────────────────────── */
+.login-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 1.75rem 0;
+}
+
+/* ── Field group ──────────────────────────────────────── */
+.login-field {
+  margin-bottom: 1.25rem;
+}
+
+.login-label {
+  display: block;
+  font-size: 1.0rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.login-input {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  background: var(--muted);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease;
+}
+
+.login-input:focus {
+  border-color: var(--foreground);
+}
+
+.login-input::placeholder {
+  color: var(--muted-foreground);
+}
+
+/* ── Primary button ───────────────────────────────────── */
+.login-btn-primary {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--foreground);
+  color: var(--background);
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: opacity 0.15s ease;
+}
+
+.login-btn-primary:hover {
+  opacity: 0.85;
+}
+
+/* ── Footer ───────────────────────────────────────────── */
+.login-footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.login-footer-text {
+  font-size: 0.9rem;
+  color: var(--muted-foreground);
+}
+
+/* ── Ghost button ─────────────────────────────────────── */
+.login-btn-ghost {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.login-btn-ghost:hover {
+  background: var(--foreground);
+  color: var(--background);
+}

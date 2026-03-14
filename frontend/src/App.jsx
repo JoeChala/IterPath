@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import StudentLoginPage from "./pages/StudentLoginPage";
-import StudentRegisterForm from "./components/StudentRegisterForm";
-import StudentDashboard from "./components/StudentDashboard";
+import StudentRegisterForm from "./components/StudentRegisterForm/StudentRegisterForm";
+import StudentDashboard from "./components/StudentDashboard/StudentDashboard";
 
 function App() {
   return (
