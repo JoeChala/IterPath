@@ -4,7 +4,6 @@ import express from "express";
 import { connectDB } from "./config/db.js";
 import recruiterRoutes from "./routes/recruiter.route.js";
 import studentRoutes from "./routes/student.route.js";
-import { initiateInvites } from "./controllers/utils.controller.js";
 import cors from "cors";
 
 const app = express();
@@ -15,9 +14,6 @@ app.use(cors());
 
 app.use("/auth/students", studentRoutes);
 app.use("/auth/recruiters", recruiterRoutes);
-// /auth/admin    /student/complete-profile(resume, linkedin,github)  /job-posting(students + recruiter(own company + post job))  
-// /jobs/view/:<uuid>   /jobs/apply/:<uuid><-(apply button)   /
-app.post("/invites", initiateInvites);
 
 await connectDB();
 app.listen(port, () => {
