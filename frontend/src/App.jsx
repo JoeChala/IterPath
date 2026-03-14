@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import StudentLoginPage from "./pages/StudentLoginPage";
-import StudentRegisterForm from "./components/StudentRegisterForm/StudentRegisterForm";
+import StudentRegisterPage from "./pages/StudentRegisterPage";
 import StudentDashboard from "./components/StudentDashboard/StudentDashboard";
 
 function App() {
@@ -8,8 +8,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<StudentLoginPage />} />
-        <Route path="/auth/students/login" element={<StudentLoginPage />} />
-        <Route path="/register" element={<StudentRegisterForm />} />
+        <Route path="/register" element={<StudentRegisterPage />} />
         <Route path="/dashboard" element={<StudentDashboard />} />
       </Routes>
     </BrowserRouter>

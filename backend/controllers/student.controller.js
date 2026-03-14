@@ -76,6 +76,12 @@ export const createStudent = async (req, res) => {
     });
 
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: "Student with this USN or Email already exists"
+      });
+    }
     console.error("Error in register student:", error.message);
 
     res.status(500).json({

@@ -1,0 +1,171 @@
+/* ── Force dark mode variables ────────────────────────── */
+:root {
+  --card: #191919;
+  --ring: #737373;
+  --input: #525252;
+  --muted: #262626;
+  --accent: #404040;
+  --border: #383838;
+  --popover: #262626;
+  --primary: #737373;
+  --sidebar: #171717;
+  --secondary: #262626;
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --destructive: #ff6467;
+  --sidebar-ring: #525252;
+  --sidebar-accent: #262626;
+  --sidebar-border: #ffffff;
+  --card-foreground: #fafafa;
+  --sidebar-primary: #fafafa;
+  --muted-foreground: #a1a1a1;
+  --accent-foreground: #fafafa;
+  --popover-foreground: #fafafa;
+  --primary-foreground: #fafafa;
+  --sidebar-foreground: #fafafa;
+  --secondary-foreground: #fafafa;
+  --destructive-foreground: #262626;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-primary-foreground: #171717;
+  --font-sans: Geist Mono, monospace;
+}
+
+/* ── Page wrapper ─────────────────────────────────────── */
+.register-page {
+  min-height: 100vh;
+  background: var(--background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  padding: 1.5rem;
+}
+
+/* ── Card ─────────────────────────────────────────────── */
+.register-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  width: 100%;
+  max-width: 400px;
+  padding: 2.5rem;
+}
+
+/* ── Header ───────────────────────────────────────────── */
+.register-header {
+  margin-bottom: 1.5rem;
+}
+
+.register-eyebrow {
+  font-size: 1.5rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin: 0 0 1.5rem 0;
+}
+
+.register-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+/* ── Divider ──────────────────────────────────────────── */
+.register-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 1.75rem 0;
+}
+
+/* ── Field group ──────────────────────────────────────── */
+.register-field {
+  margin-bottom: 1.25rem;
+}
+
+.register-label {
+  display: block;
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.register-input {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  background: var(--muted);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease;
+}
+
+.register-input:focus {
+  border-color: var(--foreground);
+}
+
+.register-input::placeholder {
+  color: var(--muted-foreground);
+}
+
+/* ── Primary button ───────────────────────────────────── */
+.register-btn-primary {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--foreground);
+  color: var(--background);
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: opacity 0.15s ease;
+}
+
+.register-btn-primary:hover {
+  opacity: 0.85;
+}
+
+/* ── Footer ───────────────────────────────────────────── */
+.register-footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.register-footer-text {
+  font-size: 0.9rem;
+  color: var(--muted-foreground);
+}
+
+/* ── Ghost button ─────────────────────────────────────── */
+.register-btn-ghost {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.register-btn-ghost:hover {
+  background: var(--foreground);
+  color: var(--background);
+}
