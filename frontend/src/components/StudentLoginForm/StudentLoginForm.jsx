@@ -6,7 +6,6 @@ function StudentLoginForm() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [hoveredBtn, setHoveredBtn] = useState(null);
 
   const loginStudent = async () => {
     const res = await fetch("http://localhost:5000/auth/students/login", {
@@ -28,7 +27,7 @@ function StudentLoginForm() {
       <div className="login-card">
         <div className="login-header">
           <p className="login-eyebrow">Student Portal</p>
-          <h1 className="login-title">Sign In</h1>
+          <h1 className="login-title">Sign In/Sign Up</h1>
         </div>
 
         <div className="login-divider" />
