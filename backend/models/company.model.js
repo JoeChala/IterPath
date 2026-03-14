@@ -1,10 +1,17 @@
+import mongoose from "mongoose";
 
 const CompanySchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    unique: true,
+    required: true,
+  },
 
   website: String,
 
   description: String,
+
+  industry: String,
 
   recruiters: [
     {
@@ -13,3 +20,5 @@ const CompanySchema = new mongoose.Schema({
     }
   ]
 });
+
+export default mongoose.model("Company",CompanySchema);

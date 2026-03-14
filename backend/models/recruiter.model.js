@@ -31,5 +31,6 @@ const recruiterSchema = new mongoose.Schema({
     required: true
   }
 }, { timestamps: true });
+recruiterSchema.index({ email: 1, company: 1 }, { unique: true });
 
 export default mongoose.model("Recruiter", recruiterSchema);
