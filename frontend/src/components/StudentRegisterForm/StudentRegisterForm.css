@@ -169,3 +169,28 @@
   background: var(--foreground);
   color: var(--background);
 }
+
+/* ── Password match feedback ──────────────────────────── */
+.password-match {
+  margin-left: 0.75rem;
+  font-size: 0.7rem;
+  color: #4ade80;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.password-mismatch {
+  margin-left: 0.75rem;
+  font-size: 0.7rem;
+  color: var(--destructive);
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.input-match {
+  border-color: #4ade80 !important;
+}
+
+.input-mismatch {
+  border-color: var(--destructive) !important;
+}

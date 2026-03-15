@@ -10,6 +10,9 @@ function StudentRegisterForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const passwordsMatch = confirmPassword.length > 0 && password === confirmPassword;
+  const passwordsMismatch = confirmPassword.length > 0 && password !== confirmPassword;
+
   const studentRegister = async () => {
     if (password !== confirmPassword) {
       alert("Passwords do not match");
@@ -22,12 +25,11 @@ function StudentRegisterForm() {
       body: JSON.stringify({ name, email, usn, password }),
     });
     const data = await res.json();
-    if(data.success){
-        alert("Student Registered");
-        navigate("/dashboard");
-    }
-    else{
-        alert(data.message);
+    if (data.success) {
+      alert("Student Registered");
+      navigate("/");
+    } else {
+      alert(data.message);
     }
   };
 
@@ -86,13 +88,17 @@ function StudentRegisterForm() {
         </div>
 
         <div className="register-field">
-          <label className="register-label">Confirm Password</label>
+          <label className="register-label">
+            Confirm Password
+            {passwordsMatch && <span className="password-match">✓ Passwords match</span>}
+            {passwordsMismatch && <span className="password-mismatch">✗ Passwords do not match</span>}
+          </label>
           <input
             type="password"
             placeholder="••••••••"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="register-input"
+            className={`register-input ${passwordsMatch ? "input-match" : ""} ${passwordsMismatch ? "input-mismatch" : ""}`}
           />
         </div>
 
