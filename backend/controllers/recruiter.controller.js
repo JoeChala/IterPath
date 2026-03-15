@@ -1,4 +1,5 @@
 import Recruiter from "../models/recruiter.model.js";
+import RecruiterInvite from "../models/invites.model.js";
 
 export const completeProfile =  async (req,res) => {
     const data = req.body;
@@ -24,4 +25,27 @@ export const completeProfile =  async (req,res) => {
             message: "Internal Server Error"
         });
     }
+};
+
+
+export const verifyInvite = async (req, res) => {
+
+  const { token } = req.params;
+
+  const invite = await RecruiterInvite.findOne({ token });
+
+  if (!invite)
+    return res.status(400).json({ message: "Invalid invite" });
+
+  if (invite.used)
+    return res.status(400).json({ message: "Invite already used" });
+
+  if (invite.expiresAt < Date.now())
+    return res.status(400).json({ message: "Invite expired" });
+
+  res.json({
+    email: invite.email,
+    company: invite.company
+  });
+
 };

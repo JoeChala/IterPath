@@ -1,8 +1,8 @@
-import { sendEmail } from "../utils/sendEmail.js";
+import sendInviteEmail from "../utils/emailService.js";
 import recruiterInvite from "../models/invites.model.js"
 import generateInviteToken from "../utils/generateInviteToken.js"
 
-export const sendInvite = async(req,res) => {
+export const sendRecruiterInvite = async(req,res) => {
   let invite;
   let token;
   let created = false;
@@ -26,9 +26,9 @@ export const sendInvite = async(req,res) => {
     }
   }
   const inviteLink =
-    `http://localhost:${process.env.PORT}/recruiter/invite/${token}`;
+    `http://localhost:5000/atuh/recruiter/invite/${token}`;
 
-  await sendEmail(email, inviteLink);
+  await sendInviteEmail(email, inviteLink);
 
   res.json({
     success: true,

@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export default async function sendEmail(email, inviteLink) {
+export default async function sendInviteEmail(email, inviteLink) {
   try{
     await transporter.sendMail({
       from: `"IterPath" <${process.env.EMAIL_USER}>`,
