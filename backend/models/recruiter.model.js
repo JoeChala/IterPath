@@ -8,11 +8,13 @@ const recruiterSchema = new mongoose.Schema({
   email: { 
     type: String, 
     required: true, 
-    unique: true 
+    lowercase: true,
+    trim: true
   },
   company: { 
     type: String,
-    require: true
+    required: true,
+    trim: true
   },
   designation: {
     type: String,
@@ -29,7 +31,11 @@ const recruiterSchema = new mongoose.Schema({
       "other"
     ],
     required: true
-  }
+  },
+  isOnboarded: {
+    type: Boolean,
+    default: false,   // flips to true once they fill in their profile after first login
+  },
 }, { timestamps: true });
 recruiterSchema.index({ email: 1, company: 1 }, { unique: true });
 

@@ -4,18 +4,26 @@ const recruiterInviteSchema = new mongoose.Schema({
   token: {
     type: String,
     unique: true,
-    index: true
+    required: true,
   },
 
-  email: String,
+  email: {
+      type: String,
+      required: true,
+      lowercase: true, 
+      trim: true,        
+      index: true,       
+    },
 
   company: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Company"
   },
 
-  expiresAt: Date,
-
+  expiresAt: {
+    type: Date,
+    required: true
+  },
   used: {
     type: Boolean,
     default: false
