@@ -1,5 +1,6 @@
 import Recruiter from "../models/recruiter.model.js";
 import RecruiterInvite from "../models/invites.model.js";
+import { requestLoginLink,inviteRecruiter,verifyInviteToken } from "../service/recruiter.service.js";
 
 export const completeProfile =  async (req,res) => {
     const data = req.body;
@@ -27,25 +28,14 @@ export const completeProfile =  async (req,res) => {
     }
 };
 
+export const inviteRecruiter = async (req,res) => {
 
-export const verifyInvite = async (req, res) => {
+};
 
-  const { token } = req.params;
+export const requestLoginLink = async (req,res) => {
 
-  const invite = await RecruiterInvite.findOne({ token });
+};
 
-  if (!invite)
-    return res.status(400).json({ message: "Invalid invite" });
-
-  if (invite.used)
-    return res.status(400).json({ message: "Invite already used" });
-
-  if (invite.expiresAt < Date.now())
-    return res.status(400).json({ message: "Invite expired" });
-
-  res.json({
-    email: invite.email,
-    company: invite.company
-  });
+export const verifyInviteToken = async (req,res) => {
 
 };
