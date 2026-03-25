@@ -1,6 +1,5 @@
 import Recruiter from "../models/recruiter.model.js";
-import RecruiterInvite from "../models/invites.model.js";
-import { requestLoginLink,inviteRecruiter,verifyInviteToken } from "../service/recruiter.service.js";
+import * as recruiterService from "../services/recruiter.service.js";
 
 export const completeProfile =  async (req,res) => {
     const data = req.body;
@@ -28,14 +27,32 @@ export const completeProfile =  async (req,res) => {
     }
 };
 
-/* export const inviteRecruiter = async (req,res) => {
-
+export const inviteRecruiter = async (req,res,next) => {
+    try{
+        const result = await recruiterService.inviteRecruiter(
+            req.body.email,
+            req.body.company,
+        );
+        res.status(200).json(result);
+    }catch(err){
+        console.log(err);
+    }
 };
 
-export const requestLoginLink = async (req,res) => {
-
+export const requestLoginLink = async (req,res,next) => {
+    try{
+        const result = await recruiterService.requestLoginLink(req.body.email);
+        res.status(200).json(result);
+    }catch(err){
+        console.log(err);
+    }
 };
 
 export const verifyInviteToken = async (req,res) => {
-
-};*/
+    try{
+        const result = await recruiterService.requestLoginLink(req.query.token);
+        res.status(200).json(result);
+    }catch(err){
+        console.log(err);
+    }
+};
