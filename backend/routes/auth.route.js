@@ -1,7 +1,6 @@
 import express from 'express'
-import { completeProfile } from '../controllers/recruiter.controller.js';
+import { completeProfile,inviteRecruiter,requestLoginLink,verifyInviteToken } from '../controllers/recruiter.controller.js';
 import {getStudents,createStudent,loginStudent} from "../controllers/student.controller.js";
-//import { sendRecruiterInvite } from "../controllers/admin.controller.js";
 
 const router=express.Router();
 
@@ -15,9 +14,11 @@ router.post("/students/",createStudent);
 // recuiter auth routes
 router.post("/recuiter/complete-profile",completeProfile);
 
-//router.get("/recruiter/invite/:id", sendRecruiterInvite);
-//router.delete("/:id",deleteStudent);
+router.post("/recruiter/invite", inviteRecruiter);
 
-//router.put("/:id",updateStudent);
+router.post("/recruiter/request",requestLoginLink)
+
+router.get("/recruiter/verify",verifyInviteToken)
+
 
 export default router;

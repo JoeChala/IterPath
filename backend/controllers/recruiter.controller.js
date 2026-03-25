@@ -48,7 +48,7 @@ export const requestLoginLink = async (req,res,next) => {
     }
 };
 
-export const verifyInviteToken = async (req,res) => {
+export const verifyInviteToken = async (req,res,next) => {
     try{
         const result = await recruiterService.verifyInviteToken(req.query.token);
         res.status(200).json(result);
