@@ -28,7 +28,7 @@ export const completeProfile =  async (req,res) => {
     }
 };
 
-export const inviteRecruiter = async (req,res) => {
+/* export const inviteRecruiter = async (req,res) => {
 
 };
 
@@ -38,4 +38,4 @@ export const requestLoginLink = async (req,res) => {
 
 export const verifyInviteToken = async (req,res) => {
 
-};
+};*/
