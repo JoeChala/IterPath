@@ -8,6 +8,7 @@ export const inviteRecruiter = async (email, company) => {
   // block duplicate active invites
   const existingInvite = await RecruiterInvite.findOne({ email, used: false });
   if (existingInvite) {
+    console.log(email);
     throw new Error('An active invite already exists for this email');
   }
 
@@ -17,7 +18,7 @@ export const inviteRecruiter = async (email, company) => {
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // now + 24h
   await RecruiterInvite.create({ email, token, expiresAt });
 
-  const inviteUrl = `${process.env.CLIENT_URL}/recruiter/verify?token=${token}`;
+  const inviteUrl = `${process.env.CLIENT_URL}/auth/recruiter/verify?token=${token}`;
 
   await sendEmail({
     to: email,
@@ -46,7 +47,7 @@ export const requestLoginLink = async (email) => {
   // sign a short-lived token, 15 minutes only
   const token = signMagicLinkToken(email, '15m');
 
-  const loginUrl = `${process.env.CLIENT_URL}/recruiter/verify?token=${token}`;
+  const loginUrl = `${process.env.CLIENT_URL}/auth/recruiter/verify?token=${token}`;
 
   await sendEmail({
     to: email,
@@ -62,6 +63,7 @@ export const requestLoginLink = async (email) => {
 
   return { message: 'Login link sent' };
 };
+
 
 export const verifyInviteToken = async (token) => {
     
@@ -111,5 +113,5 @@ export const verifyInviteToken = async (token) => {
     role: 'recruiter',
   });
 
-  return { sessionToken, recruiter: upsertedRecruiter };
+  return { sessionToken, recruiter: update_insertRecruiter };
 };

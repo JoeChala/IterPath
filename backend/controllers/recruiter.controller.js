@@ -51,7 +51,14 @@ export const requestLoginLink = async (req,res,next) => {
 export const verifyInviteToken = async (req,res,next) => {
     try{
         const result = await recruiterService.verifyInviteToken(req.query.token);
-        res.status(200).json(result);
+        res
+        .cookie('token', req.body.sessionToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        })
+        .redirect(`http://127.0.0.1:5500/frontend/recruiter-html/login.html`);
     }catch(err){
         console.log(err);
     }
