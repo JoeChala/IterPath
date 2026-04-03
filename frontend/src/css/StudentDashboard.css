@@ -1,0 +1,229 @@
+/* ── Variables (matches existing app theme) ───────────── */
+:root {
+  --card: #191919;
+  --ring: #737373;
+  --input: #525252;
+  --muted: #262626;
+  --accent: #404040;
+  --border: #383838;
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --destructive: #ff6467;
+  --muted-foreground: #a1a1a1;
+  --font-sans: Geist Mono, monospace;
+}
+
+/* ── Page ─────────────────────────────────────────────── */
+.dash-page {
+  min-height: 100vh;
+  background: var(--background);
+  font-family: var(--font-sans);
+  padding: 2rem 1.5rem;
+}
+
+.dash-container {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* ── Top bar ──────────────────────────────────────────── */
+.dash-topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.dash-eyebrow {
+  font-size: 1.3rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin: 0 0 0.4rem 0;
+}
+
+.dash-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.dash-logout {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted-foreground);
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  margin-top: 0.25rem;
+}
+
+.dash-logout:hover {
+  border-color: var(--destructive);
+  color: var(--destructive);
+}
+
+/* ── Divider ──────────────────────────────────────────── */
+.dash-divider {
+  height: 1px;
+  background: var(--border);
+  margin-bottom: 1.75rem;
+}
+
+/* ── Search ───────────────────────────────────────────── */
+.dash-search-wrap {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.dash-search-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted-foreground);
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+.dash-search {
+  width: 100%;
+  padding: 0.65rem 0.85rem 0.65rem 2.4rem;
+  background: var(--muted);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+.dash-search:focus {
+  border-color: var(--foreground);
+}
+
+.dash-search::placeholder {
+  color: var(--muted-foreground);
+}
+
+/* ── Count ────────────────────────────────────────────── */
+.dash-count {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin: 0 0 1rem 0;
+}
+
+/* ── List ─────────────────────────────────────────────── */
+.dash-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dash-empty {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  padding: 2rem 0;
+  text-align: center;
+}
+
+/* ── Card ─────────────────────────────────────────────── */
+.dash-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  animation: fadeSlideIn 0.3s ease both;
+}
+
+.dash-card:hover {
+  border-color: var(--foreground);
+  background: var(--muted);
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dash-card-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dash-card-index {
+  font-size: 0.65rem;
+  color: var(--muted-foreground);
+  letter-spacing: 0.05em;
+  min-width: 1.5rem;
+}
+
+.dash-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.dash-card-company {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--foreground);
+  letter-spacing: -0.01em;
+}
+
+.dash-card-role {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  letter-spacing: 0.05em;
+}
+
+.dash-card-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dash-card-deadline {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.5rem;
+}
+
+.dash-card-deadline.urgent {
+  color: var(--destructive);
+  border-color: var(--destructive);
+}
+
+.dash-card-arrow {
+  color: var(--muted-foreground);
+  font-size: 0.9rem;
+  transition: transform 0.15s, color 0.15s;
+}
+
+.dash-card:hover .dash-card-arrow {
+  transform: translateX(3px);
+  color: var(--foreground);
+}

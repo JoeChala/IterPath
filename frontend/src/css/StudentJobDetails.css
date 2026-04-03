@@ -1,0 +1,246 @@
+/* ── Variables ────────────────────────────────────────── */
+:root {
+  --card: #191919;
+  --muted: #262626;
+  --border: #383838;
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --destructive: #ff6467;
+  --muted-foreground: #a1a1a1;
+  --font-sans: Geist Mono, monospace;
+}
+
+/* ── Page ─────────────────────────────────────────────── */
+.detail-page {
+  min-height: 100vh;
+  background: var(--background);
+  font-family: var(--font-sans);
+  padding: 2rem 1.5rem;
+}
+
+.detail-container {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.detail-not-found {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+/* ── Back button ──────────────────────────────────────── */
+.detail-back {
+  background: none;
+  border: none;
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0;
+  cursor: pointer;
+  margin-bottom: 2rem;
+  display: block;
+  transition: color 0.15s;
+}
+
+.detail-back:hover {
+  color: var(--foreground);
+}
+
+/* ── Header ───────────────────────────────────────────── */
+.detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  animation: fadeSlideIn 0.25s ease both;
+}
+
+.detail-eyebrow {
+  font-size: 0.90rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin: 0 0 0.5rem 0;
+}
+
+.detail-company {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0 0 0.3rem 0;
+  letter-spacing: -0.03em;
+}
+
+.detail-role {
+  font-size: 0.85rem;
+  color: var(--muted-foreground);
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+.detail-deadline {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  border: 1px solid var(--border);
+  padding: 0.3rem 0.6rem;
+  white-space: nowrap;
+  margin-top: 0.25rem;
+}
+
+.detail-deadline.urgent {
+  color: var(--destructive);
+  border-color: var(--destructive);
+}
+
+/* ── Divider ──────────────────────────────────────────── */
+.detail-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 1.5rem 0;
+}
+
+/* ── Stats row ────────────────────────────────────────── */
+.detail-stats {
+  display: flex;
+  gap: 0;
+  animation: fadeSlideIn 0.3s ease 0.05s both;
+}
+
+.detail-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1rem 1.25rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-right: none;
+}
+
+.detail-stat:last-child {
+  border-right: 1px solid var(--border);
+}
+
+.detail-stat-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.detail-stat-value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+/* ── Sections ─────────────────────────────────────────── */
+.detail-section {
+  margin-bottom: 1.75rem;
+  animation: fadeSlideIn 0.3s ease 0.1s both;
+}
+
+.detail-section-title {
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin: 0 0 0.75rem 0;
+  font-weight: 600;
+}
+
+.detail-section-body {
+  font-size: 0.85rem;
+  color: var(--foreground);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ── Eligibility table ────────────────────────────────── */
+.detail-eligibility {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+}
+
+.detail-elig-row {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.detail-elig-row:last-child {
+  border-bottom: none;
+}
+
+.detail-elig-key {
+  width: 140px;
+  flex-shrink: 0;
+  padding: 0.65rem 1rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  background: var(--card);
+  border-right: 1px solid var(--border);
+}
+
+.detail-elig-val {
+  padding: 0.65rem 1rem;
+  font-size: 0.8rem;
+  color: var(--foreground);
+}
+
+/* ── Company link ─────────────────────────────────────── */
+.detail-link {
+  font-size: 0.8rem;
+  color: var(--foreground);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.1rem;
+  transition: border-color 0.15s;
+}
+
+.detail-link:hover {
+  border-color: var(--foreground);
+}
+
+/* ── Apply button ─────────────────────────────────────── */
+.detail-apply-btn {
+  display: block;
+  width: 100%;
+  padding: 0.9rem 1rem;
+  background: var(--foreground);
+  color: var(--background);
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition: opacity 0.15s;
+  animation: fadeSlideIn 0.3s ease 0.15s both;
+}
+
+.detail-apply-btn:hover {
+  opacity: 0.85;
+}
+
+/* ── Animation ────────────────────────────────────────── */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
