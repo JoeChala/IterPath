@@ -10,8 +10,10 @@ function StudentRegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const passwordsMatch = confirmPassword.length > 0 && password === confirmPassword;
-  const passwordsMismatch = confirmPassword.length > 0 && password !== confirmPassword;
+  const passwordsMatch =
+    confirmPassword.length > 0 && password === confirmPassword;
+  const passwordsMismatch =
+    confirmPassword.length > 0 && password !== confirmPassword;
 
   const studentRegister = async () => {
     if (password !== confirmPassword) {
@@ -90,8 +92,14 @@ function StudentRegisterPage() {
         <div className="register-field">
           <label className="register-label">
             Confirm Password
-            {passwordsMatch && <span className="password-match">✓ Passwords match</span>}
-            {passwordsMismatch && <span className="password-mismatch">✗ Passwords do not match</span>}
+            {passwordsMatch && (
+              <span className="password-match">✓ Passwords match</span>
+            )}
+            {passwordsMismatch && (
+              <span className="password-mismatch">
+                ✗ Passwords do not match
+              </span>
+            )}
           </label>
           <input
             type="password"

@@ -86,7 +86,7 @@ function StudentDashboard() {
   const filtered = MOCK_POSTINGS.filter(
     (p) =>
       p.company.toLowerCase().includes(search.toLowerCase()) ||
-      p.role.toLowerCase().includes(search.toLowerCase())
+      p.role.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -151,7 +151,9 @@ function StudentDashboard() {
                   </div>
                 </div>
                 <div className="dash-card-right">
-                  <span className={`dash-card-deadline ${urgent ? "urgent" : ""}`}>
+                  <span
+                    className={`dash-card-deadline ${urgent ? "urgent" : ""}`}
+                  >
                     {urgent ? "⚠ " : ""}
                     {days > 0 ? `${days}d left` : "Closed"}
                   </span>

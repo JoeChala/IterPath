@@ -11,7 +11,10 @@ function StudentPostingPage() {
       <div className="detail-page">
         <div className="detail-container">
           <p className="detail-not-found">Posting not found.</p>
-          <button className="detail-back" onClick={() => navigate("/dashboard")}>
+          <button
+            className="detail-back"
+            onClick={() => navigate("/dashboard")}
+          >
             ← Back
           </button>
         </div>
@@ -19,13 +22,14 @@ function StudentPostingPage() {
     );
   }
 
-  const days = Math.ceil((new Date(posting.deadline) - new Date()) / (1000 * 60 * 60 * 24));
+  const days = Math.ceil(
+    (new Date(posting.deadline) - new Date()) / (1000 * 60 * 60 * 24),
+  );
   const urgent = days <= 5;
 
   return (
     <div className="detail-page">
       <div className="detail-container">
-
         {/* Back */}
         <button className="detail-back" onClick={() => navigate("/dashboard")}>
           ← Back to Postings
@@ -39,7 +43,8 @@ function StudentPostingPage() {
             <p className="detail-role">{posting.role}</p>
           </div>
           <span className={`detail-deadline ${urgent ? "urgent" : ""}`}>
-            {urgent ? "⚠ " : ""}{days > 0 ? `${days}d left` : "Closed"}
+            {urgent ? "⚠ " : ""}
+            {days > 0 ? `${days}d left` : "Closed"}
           </span>
         </div>
 
@@ -59,7 +64,9 @@ function StudentPostingPage() {
             <span className="detail-stat-label">Deadline</span>
             <span className="detail-stat-value">
               {new Date(posting.deadline).toLocaleDateString("en-IN", {
-                day: "numeric", month: "short", year: "numeric"
+                day: "numeric",
+                month: "short",
+                year: "numeric",
               })}
             </span>
           </div>
@@ -79,7 +86,9 @@ function StudentPostingPage() {
           <div className="detail-eligibility">
             <div className="detail-elig-row">
               <span className="detail-elig-key">Min. CGPA</span>
-              <span className="detail-elig-val">{posting.eligibility.cgpa}</span>
+              <span className="detail-elig-val">
+                {posting.eligibility.cgpa}
+              </span>
             </div>
             <div className="detail-elig-row">
               <span className="detail-elig-key">Branches</span>
@@ -89,7 +98,9 @@ function StudentPostingPage() {
             </div>
             <div className="detail-elig-row">
               <span className="detail-elig-key">Backlogs</span>
-              <span className="detail-elig-val">{posting.eligibility.backlogs}</span>
+              <span className="detail-elig-val">
+                {posting.eligibility.backlogs}
+              </span>
             </div>
           </div>
         </div>

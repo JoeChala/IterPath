@@ -40,8 +40,8 @@ function StudentLoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="login-input"
-            onFocus={(e) => e.target.style.borderColor = "var(--foreground)"}
-            onBlur={(e) => e.target.style.borderColor = "var(--border)"}
+            onFocus={(e) => (e.target.style.borderColor = "var(--foreground)")}
+            onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
           />
         </div>
 
@@ -53,8 +53,8 @@ function StudentLoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="login-input"
-            onFocus={(e) => e.target.style.borderColor = "var(--foreground)"}
-            onBlur={(e) => e.target.style.borderColor = "var(--border)"}
+            onFocus={(e) => (e.target.style.borderColor = "var(--foreground)")}
+            onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
           />
         </div>
 
