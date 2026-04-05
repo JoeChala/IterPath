@@ -7,8 +7,8 @@ const CompanySchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    unique: true,
     required: true,
+    trim: true
   },
 
   website: String,
@@ -24,5 +24,6 @@ const CompanySchema = new mongoose.Schema({
     }
   ]
 });
+CompanySchema.createIndex({ name: 1 }, { unique: true })
 
 export default mongoose.model("Company",CompanySchema);

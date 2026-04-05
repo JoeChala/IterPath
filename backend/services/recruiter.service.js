@@ -3,6 +3,7 @@ import Recruiter from '../models/recruiter.model.js';
 import { signMagicLinkToken, verifyMagicLinkToken, signSessionToken } from '../utils/jwt.util.js';
 import { sendEmail } from '../utils/email.util.js';
 
+
 export const inviteRecruiter = async (email, company) => {
 
   // block duplicate active invites

@@ -1,16 +1,29 @@
 import Recruiter from "../models/recruiter.model.js";
+import Company from "../models/company.model.js"
 import * as recruiterService from "../services/recruiter.service.js";
 
 export const completeProfile =  async (req,res) => {
-    const data = req.body;
-    if(!data.name || !data.email || !data.company || !data.designation) {
+    const {name,email,company,designation} = req.body;
+
+    if(!name || !email || !company || !designation) {
         return res.status(400).json({
             success: false,
             message: "Please provide all the details!"
         });
     }
+    const existing = await Recruiter.findOne({ email });
+    if (existing) throw new AppError('Already registered', 400);
+
+    const companyId = await Company.findById({name : company})
+
     //add data into db
-    const newRecruiter = new Recruiter(data);
+    const newRecruiter = new Recruiter({
+        name,
+        email,
+        company,
+        designation,
+        isOnboarded: true
+    });
 
     try{
         await newRecruiter.save();
@@ -26,6 +39,7 @@ export const completeProfile =  async (req,res) => {
         });
     }
 };
+
 
 export const inviteRecruiter = async (req,res,next) => {
     try{
@@ -51,8 +65,7 @@ export const requestLoginLink = async (req,res,next) => {
 export const verifyInviteToken = async (req,res,next) => {
     try{
         const result = await recruiterService.verifyInviteToken(req.query.token);
-        res
-        .cookie('token', req.body.sessionToken, {
+        res.cookie('token', req.body.sessionToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
