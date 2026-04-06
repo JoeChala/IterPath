@@ -7,12 +7,20 @@ function StudentLoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleEnterKey = (e) => {
+    const value = document.getElementById
+    if (e.key == "Enter"){
+      loginStudent()
+    }
+  }
+
   const loginStudent = async () => {
     const res = await fetch("http://localhost:5000/auth/students/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
+
     const data = await res.json();
     if (data.success) {
       alert("Login successful");
@@ -55,6 +63,7 @@ function StudentLoginPage() {
             className="login-input"
             onFocus={(e) => (e.target.style.borderColor = "var(--foreground)")}
             onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
+            onKeyDown={handleEnterKey}
           />
         </div>
 
