@@ -24,6 +24,6 @@ const CompanySchema = new mongoose.Schema({
     }
   ]
 });
-CompanySchema.createIndex({ name: 1 }, { unique: true })
+CompanySchema.index({ name: 1 }, { unique: true })
 
 export default mongoose.model("Company",CompanySchema);
