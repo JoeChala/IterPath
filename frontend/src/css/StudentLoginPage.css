@@ -169,3 +169,13 @@
   background: var(--foreground);
   color: var(--background);
 }
+
+.input-error {
+  border: 2px solid red !important;
+}
+
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
