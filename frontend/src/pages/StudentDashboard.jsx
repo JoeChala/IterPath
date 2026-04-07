@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/StudentDashboard.css";
+import Dashboard_card from "../components/dashboard-card";
 
 const MOCK_POSTINGS = [
   {
@@ -129,37 +130,8 @@ function StudentDashboard() {
           )}
           {filtered.map((posting, i) => {
             const days = daysLeft(posting.deadline);
-            const urgent = days <= 5;
             return (
-              <div
-                key={posting.id}
-                className="dash-card"
-                style={{ animationDelay: `${i * 60}ms` }}
-                onClick={() =>
-                  navigate(`/dashboard/posting/${posting.id}`, {
-                    state: { posting },
-                  })
-                }
-              >
-                <div className="dash-card-left">
-                  <span className="dash-card-index">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <div className="dash-card-info">
-                    <span className="dash-card-company">{posting.company}</span>
-                    <span className="dash-card-role">{posting.role}</span>
-                  </div>
-                </div>
-                <div className="dash-card-right">
-                  <span
-                    className={`dash-card-deadline ${urgent ? "urgent" : ""}`}
-                  >
-                    {urgent ? "⚠ " : ""}
-                    {days > 0 ? `${days}d left` : "Closed"}
-                  </span>
-                  <span className="dash-card-arrow">→</span>
-                </div>
-              </div>
+              <Dashboard_card isUrgent={days <= 5} daysLeft={days} posting={posting} index={i}></Dashboard_card>
             );
           })}
         </div>

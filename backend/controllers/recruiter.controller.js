@@ -1,26 +1,33 @@
-import Recruiter from "../models/recruiter.model.js";
-import Company from "../models/company.model.js"
+import RecruiterDB from "../models/recruiter.model.js";
+import CompanyDB from "../models/company.model.js"
 import * as recruiterService from "../services/recruiter.service.js";
 
 export const completeProfile =  async (req,res) => {
-    const {name,email,company,designation} = req.body;
+    const {name,email,companyName,designation} = req.body;
 
-    if(!name || !email || !company || !designation) {
+    if(!name || !email || !companyName || !designation) {
         return res.status(400).json({
             success: false,
             message: "Please provide all the details!"
         });
     }
-    const existing = await Recruiter.findOne({ email });
+    const existing = await RecruiterDB.findOne({ email });
     if (existing) throw new AppError('Already registered', 400);
 
-    const companyId = await Company.findById({name : company})
+    const result = await CompanyDB.findOneAndUpdate(
+        { name: companyName },
+        { $setOnInsert: { name: companyName } },
+        { upsert: true, returnDocument: "after" }
+    );
+
+    const companyId = result.value._id;
+
 
     //add data into db
     const newRecruiter = new Recruiter({
         name,
         email,
-        company,
+        companyId,
         designation,
         isOnboarded: true
     });
