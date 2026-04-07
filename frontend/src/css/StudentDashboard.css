@@ -88,11 +88,27 @@
 .dash-search-icon {
   position: absolute;
   left: 0.85rem;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 30%;
   color: var(--muted-foreground);
-  font-size: 1.1rem;
-  pointer-events: none;
+  transform: scaleX(-1);
+  transition: transform 0.15s ease-out;
+}
+
+.dash-search-icon:focus {
+  outline: 2px solid var(--border);
+  outline-offset: 2px;
+}
+.dash-spinner {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg) scaleX(-1);
+  }
+  to {
+    transform: rotate(360deg) scaleX(-1);
+  }
 }
 
 .dash-search {
@@ -107,6 +123,7 @@
   box-sizing: border-box;
   transition: border-color 0.15s;
 }
+
 
 .dash-search:focus {
   border-color: var(--foreground);

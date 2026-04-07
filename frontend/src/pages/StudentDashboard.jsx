@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/StudentDashboard.css";
 import Dashboard_card from "../components/dashboard-card";
-import { LogOut } from "lucide-react"
+import { LogOut, Search, Loader2 } from "lucide-react";
 
 const MOCK_POSTINGS = [
   {
@@ -84,6 +84,22 @@ function daysLeft(deadline) {
 function StudentDashboard() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!search) {
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 400); // adjust timing here
+
+    return () => clearTimeout(timeout);
+  }, [search]);
 
   const filtered = MOCK_POSTINGS.filter(
     (p) =>
@@ -110,7 +126,13 @@ function StudentDashboard() {
 
         {/* Search */}
         <div className="dash-search-wrap">
-          <span className="dash-search-icon">⌕</span>
+          <span className="dash-search-icon">
+            {loading ? (
+              <Loader2 size={14} strokeWidth={2} className="dash-spinner" />
+            ) : (
+              <Search size={14} strokeWidth={2} />
+            )}
+          </span>
           <input
             className="dash-search"
             type="text"
