@@ -12,7 +12,7 @@ router.get("/students/",getStudents);
 router.post("/students/",createStudent);
 
 // recuiter auth routes
-router.post("/recuiter/complete-profile",completeProfile);
+router.post("/recruiter/complete-profile",completeProfile);
 
 router.post("/recruiter/invite", inviteRecruiter);
 
