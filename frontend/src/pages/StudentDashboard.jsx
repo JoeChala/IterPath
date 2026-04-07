@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/StudentDashboard.css";
 import Dashboard_card from "../components/dashboard-card";
+import { LogOut } from "lucide-react"
 
 const MOCK_POSTINGS = [
   {
@@ -99,8 +100,9 @@ function StudentDashboard() {
             <p className="dash-eyebrow">Student Portal</p>
             <h1 className="dash-title">Placement Postings</h1>
           </div>
-          <button className="dash-logout" onClick={() => navigate("/")}>
-            Logout
+          <button className="dash-logout flex items-center gap-2" onClick={() => navigate("/")}>
+            <span>Logout</span>
+            <LogOut size={13} strokeWidth={2} className="translate-y-[1px]" />
           </button>
         </div>
 

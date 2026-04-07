@@ -51,12 +51,15 @@
 }
 
 .dash-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   background: none;
   border: 1px solid var(--border);
   color: var(--muted-foreground);
   font-family: var(--font-sans);
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
+  font-size: 0.8rem;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   padding: 0.4rem 0.75rem;
   cursor: pointer;
