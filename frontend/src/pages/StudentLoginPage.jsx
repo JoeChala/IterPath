@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../css/StudentLoginPage.css";
+import "../css/LoginPage.css";
 
 function StudentLoginPage() {
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ function StudentLoginPage() {
 
       if (data.success) {
         alert("Login successful");
-        navigate("/dashboard");
+        navigate("/s/dashboard");
       } else {
         alert(data.message);
       }
