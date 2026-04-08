@@ -2,13 +2,19 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/LoginPage.css";
 
+const validateEmail = (email) => {
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  return emailRegex.test(email);
+};
+
 function StudentLoginPage() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [emailError, setEmailError] = useState(false);
+  const [emailEmptyError, setEmailEmptyError] = useState(false);
+  const [emailFormatError, setEmailFormatError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
 
   const handleEnterKey = (e) => {
@@ -20,9 +26,17 @@ function StudentLoginPage() {
   const loginStudent = async () => {
     let hasError = false;
 
+    // clear errors
+    setEmailEmptyError(false);
+    setEmailFormatError(false);
+    setPasswordError(false);
+
     // Validate Email
     if (!email.trim()) {
-      setEmailError(true);
+      setEmailEmptyError(true);
+      hasError = true;
+    } else if (!validateEmail(email)) {
+      setEmailFormatError(true);
       hasError = true;
     }
 
@@ -33,11 +47,7 @@ function StudentLoginPage() {
     }
 
     // Stop if validation fails
-    if (hasError) return;
-
-    // Clear errors
-    setEmailError(false);
-    setPasswordError(false);
+    if (hasError) return;    
 
     try {
       const res = await fetch("http://localhost:5000/auth/students/login", {
@@ -81,19 +91,32 @@ function StudentLoginPage() {
             placeholder="you@example.com"
             value={email}
             onChange={(e) => {
-              setEmail(e.target.value);
+              const value = e.target.value;
+              setEmail(value);
 
-              if (emailError) {
-                setEmailError(false);
+              if (!value.trim()) {
+                setEmailFormatError(false);
+                setEmailEmptyError(false);
+              } else {
+                setEmailEmptyError(false);
+
+                if (validateEmail(value)) {
+                  setEmailFormatError(false);
+                }
               }
             }}
-            className={`login-input ${emailError ? "input-error" : ""}`}
-            onFocus={(e) => (e.target.style.borderColor = "var(--foreground)")}
-            onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
+            className={`login-input ${
+              emailEmptyError || emailFormatError ? "input-error" : ""
+            }`}
             onKeyDown={handleEnterKey}
           />
-
-          {emailError && <p className="error-text">Email cannot be empty</p>}
+          
+          {emailEmptyError && (
+            <p className="error-text">Email cannot be empty</p>
+          )}
+          {emailFormatError && (
+            <p className="error-text">Invalid Email Id</p>
+          )}
         </div>
 
         {/* Password Field */}

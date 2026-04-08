@@ -23,7 +23,6 @@ function RecruiterLoginPage() {
   const loginRecruiter = async () => {
     let hasError = false;
 
-    // ✅ Reset errors first
     setEmailEmptyError(false);
     setEmailFormatError(false);
 
@@ -32,7 +31,6 @@ function RecruiterLoginPage() {
       setEmailEmptyError(true);
       hasError = true;
     } else if (!validateEmail(email)) {
-      // ✅ Only check format if not empty
       setEmailFormatError(true);
       hasError = true;
     }
@@ -74,7 +72,7 @@ function RecruiterLoginPage() {
 
         <div className="login-field">
           <label className="login-label">Email Address</label>
-
+          {/* email field*/}
           <input
             type="email"
             placeholder="you@example.com"
