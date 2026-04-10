@@ -9,7 +9,6 @@ export const inviteRecruiter = async (email, company) => {
   // block duplicate active invites
   const existingInvite = await RecruiterInvite.findOne({ email, used: false });
   if (existingInvite) {
-    console.log(email);
     throw new Error('An active invite already exists for this email');
   }
 
