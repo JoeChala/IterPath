@@ -11,8 +11,8 @@ const recruiterSchema = new mongoose.Schema({
     lowercase: true,
     trim: true
   },
-  company: { 
-    type: String,
+  companyId: { 
+    type: Number,
     required: true,
     trim: true
   },

@@ -18,7 +18,7 @@ function HomePage() {
           {/* Recruiter */}
           <div
             className="home-card"
-            onClick={() => navigate("/recruiter/login")}
+            onClick={() => navigate("/r/login")}
           >
             <h2>Recruiter Login</h2>
             <p>Post job openings and review applications.</p>
@@ -27,10 +27,9 @@ function HomePage() {
           </div>
 
           {/* Student */}
-          <div className="home-card" onClick={() => navigate("/student/login")}>
+          <div className="home-card" onClick={() => navigate("/s/login")}>
             <h2>Student Login</h2>
             <p>Browse placements and apply for opportunities.</p>
-
             <button className="home-btn">Continue →</button>
           </div>
         </div>

@@ -47,7 +47,6 @@ export const completeProfile =  async (req,res) => {
     }
 };
 
-
 export const inviteRecruiter = async (req,res,next) => {
     try{
         const result = await recruiterService.inviteRecruiter(
@@ -82,4 +81,20 @@ export const verifyInviteToken = async (req,res,next) => {
     }catch(err){
         console.log(err);
     }
+};
+
+export const postJobListing = async (req,res,next) => {
+    const { name,email,company } = req.body;
+
+
+
+    try{
+
+    }catch{
+        console.log(err);
+    }
+};
+
+export const viewJobListing = async (req,res,next) => {
+
 };
