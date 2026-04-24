@@ -155,7 +155,7 @@ function StudentLoginPage() {
           <span className="login-footer-text">New student?</span>
 
           <button
-            onClick={() => navigate("/register")}
+            onClick={() => navigate("/s/register")}
             className="login-btn-ghost"
           >
             Register Now

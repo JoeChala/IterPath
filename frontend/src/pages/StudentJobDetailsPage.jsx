@@ -13,7 +13,7 @@ function StudentPostingPage() {
           <p className="detail-not-found">Posting not found.</p>
           <button
             className="detail-back"
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/s/dashboard")}
           >
             ← Back
           </button>
