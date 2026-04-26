@@ -4,6 +4,7 @@ import express from "express";
 import { connectDB } from "./config/db.js";
 import authRoutes from "./routes/auth.route.js"
 import recruiterRoutes from "./routes/recruiter.route.js";
+import studentRoutes from "./routes/student.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -19,6 +20,7 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/recruiter", recruiterRoutes);
+app.use("/api/student", studentRoutes);
 
 await connectDB();
 app.listen(port, () => {

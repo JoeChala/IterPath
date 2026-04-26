@@ -2,7 +2,8 @@ import { useState } from "react";
 import RecruiterSidebar from "../components/recruiter/RecruiterSidebar";
 import DashboardStats from "../components/recruiter/DashboardStats";
 import JobList from "../components/recruiter/JobList";
-import ApplicantsList from "../components/recruiter/ApplicantsList";
+import ApplicantsList from "../components/recruiter/ApplicantList";
+import "../css/RecruiterDashboard.css";
 
 export default function RecruiterDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -17,11 +18,22 @@ export default function RecruiterDashboard() {
   };
 
   return (
-    <div style={{ display: "flex" }}>
-      <RecruiterSidebar setActiveTab={setActiveTab} />
-      <div style={{ flex: 1, padding: "20px" }}>
-        {renderContent()}
-      </div>
+    <div className="recruiter-dashboard-page">
+      <RecruiterSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <main className="recruiter-dashboard-main">
+        <div className="recruiter-dashboard-shell">
+          <header className="recruiter-dashboard-header">
+            <p className="recruiter-dashboard-eyebrow">Recruiter Portal</p>
+            <h1 className="recruiter-dashboard-title">
+              {activeTab === "dashboard" && "Dashboard"}
+              {activeTab === "jobs" && "Jobs"}
+              {activeTab === "applicants" && "Applicants"}
+            </h1>
+          </header>
+
+          {renderContent()}
+        </div>
+      </main>
     </div>
   );
 }

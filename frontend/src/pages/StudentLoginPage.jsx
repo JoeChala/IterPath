@@ -50,8 +50,9 @@ function StudentLoginPage() {
     if (hasError) return;    
 
     try {
-      const res = await fetch("http://localhost:5000/auth/students/login", {
+      const res = await fetch("http://localhost:5000/api/auth/students/login", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

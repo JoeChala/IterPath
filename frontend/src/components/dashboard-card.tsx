@@ -4,11 +4,11 @@ function Dash_Card(props){
     const navigate = useNavigate();
     return (
       <div
-        key={props.posting.id}
+        key={props.posting._id}
         className="dash-card"
         style={{ animationDelay: `${props.index*50}ms` }}
         onClick={() =>
-            navigate(`/dashboard/posting/${props.posting.id}`, {
+            navigate(`/s/dashboard/posting/${props.posting._id}`, {
             state: { posting: props.posting },
           })
         }

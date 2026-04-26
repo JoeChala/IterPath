@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import JobForm from "./JobForm";
+import { Eye, Trash2 } from "lucide-react";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 export default function JobList({ setSelectedJob }) {
   const [jobs, setJobs] = useState([]);
 
   const fetchJobs = () => {
-    fetch("/api/recruiter/jobs", {
-      headers: {
-        Authorization: localStorage.getItem("token"),
-      },
+    fetch(`${API_BASE_URL}/api/recruiter/jobs`, {
+      credentials: "include",
     })
       .then(res => res.json())
-      .then(data => setJobs(data));
+      .then(data => setJobs(Array.isArray(data) ? data : []));
   };
 
   useEffect(() => {
@@ -19,32 +20,59 @@ export default function JobList({ setSelectedJob }) {
   }, []);
 
   const deleteJob = async (id) => {
-    await fetch(`/api/recruiter/jobs/${id}`, {
+    await fetch(`${API_BASE_URL}/api/recruiter/jobs/${id}`, {
       method: "DELETE",
-      headers: {
-        Authorization: localStorage.getItem("token"),
-      },
+      credentials: "include",
     });
     fetchJobs();
   };
 
   return (
-    <div>
-      <h2>Jobs</h2>
+    <>
+      <section className="recruiter-panel">
+        <h2 className="recruiter-section-title">Create Job</h2>
+        <JobForm refreshJobs={fetchJobs} />
+      </section>
 
-      <JobForm refreshJobs={fetchJobs} />
+      <section className="recruiter-panel">
+        <h2 className="recruiter-section-title">Open Jobs</h2>
 
-      {jobs.map(job => (
-        <div key={job._id} style={{ border: "1px solid", margin: "10px" }}>
-          <h3>{job.title}</h3>
-          <button onClick={() => setSelectedJob(job._id)}>
-            View Applicants
-          </button>
-          <button onClick={() => deleteJob(job._id)}>
-            Delete
-          </button>
+        <div className="recruiter-list">
+          {jobs.length === 0 && (
+            <p className="recruiter-muted-text">No jobs posted yet.</p>
+          )}
+
+          {jobs.map(job => (
+            <article key={job._id} className="recruiter-list-item">
+              <h3 className="recruiter-list-title">
+                {job.role || "Untitled Job"}
+              </h3>
+              {job.company && (
+                <p className="recruiter-list-meta">{job.company}</p>
+              )}
+
+              <div className="recruiter-actions">
+                <button
+                  className="recruiter-btn"
+                  onClick={() => setSelectedJob(job._id)}
+                  type="button"
+                >
+                  <Eye size={16} />
+                  View Applicants
+                </button>
+                <button
+                  className="recruiter-btn danger"
+                  onClick={() => deleteJob(job._id)}
+                  type="button"
+                >
+                  <Trash2 size={16} />
+                  Delete
+                </button>
+              </div>
+            </article>
+          ))}
         </div>
-      ))}
-    </div>
+      </section>
+    </>
   );
 }

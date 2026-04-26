@@ -1,4 +1,26 @@
 import { useEffect, useState } from "react";
+import "../css/RecruiterOnboarding.css";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+
+const DESIGNATION_OPTIONS = [
+  { value: "hr-executive", label: "HR Executive" },
+  { value: "hr-manager", label: "HR Manager" },
+  {
+    value: "talent-acquisition-specialist",
+    label: "Talent Acquisition Specialist",
+  },
+  {
+    value: "talent-acquisition-manager",
+    label: "Talent Acquisition Manager",
+  },
+  { value: "campus-recruiter", label: "Campus Recruiter" },
+  { value: "hiring-manager", label: "Hiring Manager" },
+  { value: "software-engineer", label: "Software Engineer" },
+  { value: "senior-software-engineer", label: "Senior Software Engineer" },
+  { value: "engineering-manager", label: "Engineering Manager" },
+  { value: "other", label: "Other" },
+];
 
 export default function Onboarding() {
   const [form, setForm] = useState({
@@ -13,10 +35,18 @@ export default function Onboarding() {
 
   // Fetch current recruiter (to prefill email)
   useEffect(() => {
-    fetch("/api/auth/me", {
-      credentials: "include", // IMPORTANT for cookies
+    fetch(`${API_BASE_URL}/api/auth/me`, {
+      credentials: "include",
     })
-      .then(res => res.json())
+      .then(async (res) => {
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.message || "Failed to load user");
+        }
+
+        return data;
+      })
       .then(data => {
         if (data?.email) {
           setForm(prev => ({
@@ -26,7 +56,7 @@ export default function Onboarding() {
           }));
         }
       })
-      .catch(() => setError("Failed to load user"));
+      .catch((err) => setError(err.message || "Failed to load user"));
   }, []);
 
   // Handle input
@@ -44,7 +74,7 @@ export default function Onboarding() {
     setError("");
 
     try {
-      const res = await fetch("/recruiter/complete-profile", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/recruiter/complete-profile`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,7 +90,7 @@ export default function Onboarding() {
       }
 
       // Redirect to dashboard
-      window.location.href = "/recruiter/dashboard";
+      window.location.href = "/r/dashboard";
 
     } catch (err) {
       setError(err.message);
@@ -70,46 +100,96 @@ export default function Onboarding() {
   };
 
   return (
-    <div style={{ maxWidth: "500px", margin: "50px auto" }}>
-      <h2>Complete Your Profile</h2>
+    <div className="onboarding-page">
+      <div className="onboarding-card">
+        <div className="onboarding-header">
+          <p className="onboarding-eyebrow">Recruiter Portal</p>
+          <h1 className="onboarding-title">Complete Your Profile</h1>
+          <p className="onboarding-subtitle">
+            Finish your recruiter details before entering the dashboard.
+          </p>
+        </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        <div className="onboarding-divider" />
 
-      <form onSubmit={handleSubmit}>
-        <input
-          name="name"
-          placeholder="Full Name"
-          value={form.name}
-          onChange={handleChange}
-          required
-        />
+        {error && <p className="onboarding-error">{error}</p>}
 
-        <input
-          name="email"
-          value={form.email}
-          disabled
-        />
+        <form onSubmit={handleSubmit}>
+          <div className="onboarding-field">
+            <label className="onboarding-label" htmlFor="recruiter-name">
+              Full Name
+            </label>
+            <input
+              id="recruiter-name"
+              className="onboarding-input"
+              name="name"
+              placeholder="Enter your full name"
+              value={form.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <input
-          name="companyName"
-          placeholder="Company"
-          value={form.companyName}
-          onChange={handleChange}
-          required
-        />
+          <div className="onboarding-field">
+            <label className="onboarding-label" htmlFor="recruiter-email">
+              Email
+            </label>
+            <input
+              id="recruiter-email"
+              className="onboarding-input"
+              name="email"
+              value={form.email}
+              disabled
+            />
+          </div>
 
-        <input
-          name="designation"
-          placeholder="Designation"
-          value={form.designation}
-          onChange={handleChange}
-          required
-        />
+          <div className="onboarding-field">
+            <label className="onboarding-label" htmlFor="recruiter-company">
+              Company
+            </label>
+            <input
+              id="recruiter-company"
+              className="onboarding-input"
+              name="companyName"
+              placeholder="Enter company name"
+              value={form.companyName}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Saving..." : "Complete Profile"}
-        </button>
-      </form>
+          <div className="onboarding-field">
+            <label className="onboarding-label" htmlFor="recruiter-designation">
+              Designation
+            </label>
+            <select
+              id="recruiter-designation"
+              className="onboarding-select"
+              name="designation"
+              value={form.designation}
+              onChange={handleChange}
+              required
+            >
+              <option value="" disabled>
+                Select designation
+              </option>
+              {DESIGNATION_OPTIONS.map((designation) => (
+                <option key={designation.value} value={designation.value}>
+                  {designation.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            className="onboarding-btn-primary"
+            disabled={loading}
+          >
+            {loading ? "Saving..." : "Complete Profile"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

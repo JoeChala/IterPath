@@ -1,16 +1,49 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "../css/StudentJobDetails.css";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 function StudentPostingPage() {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const posting = state?.posting;
+  const { id } = useParams();
+  const [posting, setPosting] = useState(state?.posting || null);
+  const [loading, setLoading] = useState(!state?.posting);
+  const [error, setError] = useState("");
 
-  if (!posting) {
+  useEffect(() => {
+    if (posting || !id) return;
+
+    const fetchPosting = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/student/jobs/${id}`, {
+          credentials: "include",
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.message || "Posting not found");
+        }
+
+        setPosting(data.data);
+      } catch (err) {
+        setError(err.message || "Posting not found");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosting();
+  }, [id, posting]);
+
+  if (loading || !posting) {
     return (
       <div className="detail-page">
         <div className="detail-container">
-          <p className="detail-not-found">Posting not found.</p>
+          <p className="detail-not-found">
+            {loading ? "Loading posting..." : error || "Posting not found."}
+          </p>
           <button
             className="detail-back"
             onClick={() => navigate("/s/dashboard")}
@@ -31,7 +64,7 @@ function StudentPostingPage() {
     <div className="detail-page">
       <div className="detail-container">
         {/* Back */}
-        <button className="detail-back" onClick={() => navigate("/dashboard")}>
+        <button className="detail-back" onClick={() => navigate("/s/dashboard")}>
           ← Back to Postings
         </button>
 
@@ -99,7 +132,9 @@ function StudentPostingPage() {
             <div className="detail-elig-row">
               <span className="detail-elig-key">Backlogs</span>
               <span className="detail-elig-val">
-                {posting.eligibility.backlogs}
+                {posting.eligibility.backlogs === 0
+                  ? "No active backlogs"
+                  : `${posting.eligibility.backlogs} backlog${posting.eligibility.backlogs === 1 ? "" : "s"}`}
               </span>
             </div>
           </div>
