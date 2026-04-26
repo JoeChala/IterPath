@@ -1,6 +1,10 @@
 import RecruiterInvite from '../models/invites.model.js';
 import Recruiter from '../models/recruiter.model.js';
-import { signMagicLinkToken, verifyMagicLinkToken, signSessionToken } from '../utils/jwt.util.js';
+import {
+  signMagicLinkToken,
+  verifyMagicLinkToken,
+  signSessionToken
+} from '../utils/jwt.util.js';
 import { sendEmail } from '../utils/email.util.js';
 
 
@@ -9,16 +13,22 @@ export const inviteRecruiter = async (email, company) => {
   // block duplicate active invites
   const existingInvite = await RecruiterInvite.findOne({ email, used: false });
   if (existingInvite) {
-    throw new Error('An active invite already exists for this email');
+    throw new Error('An active invite already exists');
   }
 
   // sign the token, valid for 24 hours
   const token = signMagicLinkToken(email, '24h');
 
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // now + 24h
-  await RecruiterInvite.create({ email, token, expiresAt });
+  await RecruiterInvite.create({
+    email,
+    token,
+    company,
+    expiresAt,
+  });
 
-  const inviteUrl = `${process.env.CLIENT_URL}/auth/recruiter/verify?token=${token}`;
+  const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+  const inviteUrl = `${clientUrl}/r/verify?token=${token}`;
 
   await sendEmail({
     to: email,
@@ -40,6 +50,7 @@ export const requestLoginLink = async (email) => {
 
   // check if account exists
   const recruiter = await Recruiter.findOne({ email });
+
   if (!recruiter) {
     throw new Error('No recruiter account found for this email');
   }
@@ -47,7 +58,8 @@ export const requestLoginLink = async (email) => {
   // sign a short-lived token, 15 minutes only
   const token = signMagicLinkToken(email, '15m');
 
-  const loginUrl = `${process.env.CLIENT_URL}/auth/recruiter/verify?token=${token}`;
+  const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+  const loginUrl = `${clientUrl}/r/verify?token=${token}`;
 
   await sendEmail({
     to: email,
@@ -66,52 +78,59 @@ export const requestLoginLink = async (email) => {
 
 
 export const verifyInviteToken = async (token) => {
-    
+
   const payload = verifyMagicLinkToken(token);
 
-  // mark invite as used, link cannot be clicked again
-  const invite = await RecruiterInvite.findOneAndUpdate(
-    { email: payload.email, used: false },
-    { used: true },
-    { new: true }
-  );
-  const recruiter = await Recruiter.findOne({ email: payload.email });
+  const invite = await RecruiterInvite.findOne({
+    email: payload.email,
+    used: false,
+  });
 
-  if (!invite && !recruiter) {
-    // No invite record and no account
-    throw new Error('Invalid invite');
+  // check expiry
+  if (invite && invite.expiresAt < new Date()) {
+    throw new Error('Invite expired');
   }
 
+  let recruiter = await Recruiter.findOne({ email: payload.email });
+
+  // CASE 1: Existing recruiter (login flow)
   if (!invite && recruiter) {
-    // No invite record
     const sessionToken = signSessionToken({
       sub: recruiter._id,
       role: 'recruiter',
     });
+
     return { sessionToken, recruiter };
   }
 
-  // update and insert the recruiter account
-  // if the recruiter already exists nothing gets overwritten
-  const update_insertRecruiter = await Recruiter.findOneAndUpdate(
+  // invalid case
+  if (!invite && !recruiter) {
+    throw new Error('Invalid invite');
+  }
+
+  // CASE 2: First-time invite → create recruiter
+  recruiter = await Recruiter.findOneAndUpdate(
     { email: payload.email },
     {
       $setOnInsert: {
         email: payload.email,
         company: invite.company,
-        name: 'Pending',       
-        designation: 'other',  
+        name: 'Pending',
+        designation: 'Pending',
         isOnboarded: false,
       },
     },
-    { upsert: true, new: true }
+    { upsert: true, returnDocument: 'after' }
   );
 
-  // issue a session token
+  // mark invite used
+  invite.used = true;
+  await invite.save();
+
   const sessionToken = signSessionToken({
-    sub: update_insertRecruiter._id,
+    sub: recruiter._id,
     role: 'recruiter',
   });
 
-  return { sessionToken, recruiter: update_insertRecruiter };
+  return { sessionToken, recruiter };
 };

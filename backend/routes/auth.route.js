@@ -1,24 +1,32 @@
 import express from 'express'
 import { completeProfile,inviteRecruiter,requestLoginLink,verifyInviteToken } from '../controllers/recruiter.controller.js';
 import {getStudents,createStudent,loginStudent} from "../controllers/student.controller.js";
+import { getMe } from "../controllers/auth.controller.js";
+import { authenticateSession, requireRole } from "../middleware/auth.middleware.js";
 
 const router=express.Router();
 
 //student auth routes
 router.post("/students/login", loginStudent);
 
-router.get("/students/",getStudents);
+router.get("/students", authenticateSession, requireRole("admin"), getStudents);
 
-router.post("/students/",createStudent);
+router.post("/students",createStudent);
 
 // recuiter auth routes
-router.post("/recruiter/complete-profile",completeProfile);
+router.post(
+  "/recruiter/complete-profile",
+  authenticateSession,
+  requireRole("recruiter"),
+  completeProfile
+);
 
-router.post("/recruiter/invite", inviteRecruiter);
+router.post("/recruiter/invite", authenticateSession, requireRole("admin"), inviteRecruiter);
 
 router.post("/recruiter/request",requestLoginLink)
 
 router.get("/recruiter/verify",verifyInviteToken)
 
+router.get("/me", authenticateSession, getMe);
 
 export default router;

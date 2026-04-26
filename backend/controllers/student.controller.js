@@ -1,5 +1,6 @@
 import Student from "../models/student.model.js";
 import bcrypt from "bcrypt";
+import { signSessionToken } from "../utils/jwt.util.js";
 
 export const loginStudent = async (req, res) => {
   const { email, password } = req.body;
@@ -24,6 +25,17 @@ export const loginStudent = async (req, res) => {
     }
 
     const { password: _, ...studentData } = student._doc;
+    const token = signSessionToken({
+      sub: student._id,
+      role: "student",
+    });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
     res.status(200).json({
       success: true,
