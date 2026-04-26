@@ -129,6 +129,7 @@ export default function JobForm({ refreshJobs }) {
             max="10"
             min="0"
             placeholder="Minimum CGPA"
+            step="0.01"
             type="number"
             value={form.cgpa}
             onChange={(e) => setForm({ ...form, cgpa: e.target.value })}

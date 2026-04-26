@@ -31,10 +31,13 @@ export const loginStudent = async (req, res) => {
       role: "student",
     });
 
+    res.clearCookie("token", { path: "/api/auth" });
+    res.clearCookie("token", { path: "/api/auth/" });
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
+      path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 

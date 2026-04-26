@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../css/StudentRegisterPage.css";
+import "../../css/StudentRegisterPage.css";
 
 function StudentRegisterPage() {
   const navigate = useNavigate();

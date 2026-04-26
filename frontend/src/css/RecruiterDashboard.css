@@ -81,6 +81,10 @@
 }
 
 .recruiter-dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
   margin-bottom: 1.75rem;
 }
 
@@ -95,6 +99,29 @@
 .recruiter-dashboard-title {
   font-size: 1.6rem;
   margin: 0;
+}
+
+.recruiter-logout-button {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted-foreground);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 40px;
+  padding: 0.65rem 0.85rem;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+
+.recruiter-logout-button:hover {
+  border-color: var(--destructive);
+  color: var(--destructive);
 }
 
 .recruiter-panel {
@@ -287,6 +314,16 @@
 
   .recruiter-dashboard-main {
     padding: 1rem;
+  }
+
+  .recruiter-dashboard-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .recruiter-logout-button {
+    width: 100%;
+    justify-content: center;
   }
 
   .recruiter-stats-grid,

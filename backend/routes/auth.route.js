@@ -1,7 +1,7 @@
 import express from 'express'
 import { completeProfile,inviteRecruiter,requestLoginLink,verifyInviteToken } from '../controllers/recruiter.controller.js';
 import {getStudents,createStudent,loginStudent} from "../controllers/student.controller.js";
-import { getMe } from "../controllers/auth.controller.js";
+import { getMe, logout } from "../controllers/auth.controller.js";
 import { authenticateSession, requireRole } from "../middleware/auth.middleware.js";
 
 const router=express.Router();
@@ -28,5 +28,7 @@ router.post("/recruiter/request",requestLoginLink)
 router.get("/recruiter/verify",verifyInviteToken)
 
 router.get("/me", authenticateSession, getMe);
+
+router.post("/logout", logout);
 
 export default router;

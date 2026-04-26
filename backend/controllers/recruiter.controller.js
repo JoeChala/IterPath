@@ -78,10 +78,13 @@ export const verifyInviteToken = async (req, res) => {
     const { sessionToken, recruiter } =
       await recruiterService.verifyInviteToken(req.query.token);
 
+    res.clearCookie("token", { path: "/api/auth" });
+    res.clearCookie("token", { path: "/api/auth/" });
     res.cookie("token", sessionToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
+      path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -141,7 +144,9 @@ export const postJobListing = async (req,res) => {
         !openings ||
         !deadline ||
         !description ||
-        !eligibility?.cgpa ||
+        eligibility?.cgpa === undefined ||
+        eligibility?.cgpa === null ||
+        eligibility?.cgpa === "" ||
         !eligibility?.branches?.length ||
         eligibility.backlogs === undefined ||
         !website ||
@@ -171,7 +176,7 @@ export const postJobListing = async (req,res) => {
             deadline,
             description,
             eligibility: {
-                cgpa: Number(eligibility.cgpa),
+                cgpa: parseFloat(eligibility.cgpa),
                 branches: eligibility.branches,
                 backlogs: Number(eligibility.backlogs),
             },

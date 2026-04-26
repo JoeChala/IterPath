@@ -37,3 +37,19 @@ export const getMe = async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 };
+
+export const logout = (req, res) => {
+  res.clearCookie("token", { path: "/api/auth" });
+  res.clearCookie("token", { path: "/api/auth/" });
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    path: "/",
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "Logged out",
+  });
+};

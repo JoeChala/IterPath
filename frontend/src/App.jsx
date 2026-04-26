@@ -2,14 +2,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import HomePage from "./pages/HomePage";
 
-import StudentLoginPage from "./pages/StudentLoginPage";
-import StudentRegisterPage from "./pages/StudentRegisterPage";
-import StudentDashboard from "./pages/StudentDashboard.jsx";
-import StudentPostingPage from "./pages/StudentJobDetailsPage.jsx";
-import RecruiterLoginPage from "./pages/RecruiterLoginPage.jsx";
-import RecruiterVerifyPage from "./pages/RecruiterVerifyPage.jsx";
-import RecruiterOnboarding from "./pages/RecruiterOnboarding.jsx";
-import RecruiterDashboard from "./pages/RecruiterDashboard.jsx";
+import StudentLoginPage from "./pages/student/StudentLoginPage";
+import StudentRegisterPage from "./pages/student/StudentRegisterPage";
+import StudentDashboard from "./pages/student/StudentDashboard.jsx";
+import StudentPostingPage from "./pages/student/StudentJobDetailsPage.jsx";
+import RecruiterLoginPage from "./pages/recruiter/RecruiterLoginPage.jsx";
+import RecruiterVerifyPage from "./pages/recruiter/RecruiterVerifyPage.jsx";
+import RecruiterOnboarding from "./pages/recruiter/RecruiterOnboarding.jsx";
+import RecruiterDashboard from "./pages/recruiter/RecruiterDashboard.jsx";
 
 function App() {
   return (
