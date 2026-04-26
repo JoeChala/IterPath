@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const CompanySchema = new mongoose.Schema({
   company_id : {
-    required: true,
-    type: Number
+    type: Number,
+    default: () => Date.now()
   },
   name: {
     type: String,

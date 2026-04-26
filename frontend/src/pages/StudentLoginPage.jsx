@@ -50,8 +50,9 @@ function StudentLoginPage() {
     if (hasError) return;    
 
     try {
-      const res = await fetch("http://localhost:5000/auth/students/login", {
+      const res = await fetch("http://localhost:5000/api/auth/students/login", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -155,7 +156,7 @@ function StudentLoginPage() {
           <span className="login-footer-text">New student?</span>
 
           <button
-            onClick={() => navigate("/register")}
+            onClick={() => navigate("/s/register")}
             className="login-btn-ghost"
           >
             Register Now

@@ -7,6 +7,9 @@ import StudentRegisterPage from "./pages/StudentRegisterPage";
 import StudentDashboard from "./pages/StudentDashboard.jsx";
 import StudentPostingPage from "./pages/StudentJobDetailsPage.jsx";
 import RecruiterLoginPage from "./pages/RecruiterLoginPage.jsx";
+import RecruiterVerifyPage from "./pages/RecruiterVerifyPage.jsx";
+import RecruiterOnboarding from "./pages/RecruiterOnboarding.jsx";
+import RecruiterDashboard from "./pages/RecruiterDashboard.jsx";
 
 function App() {
   return (
@@ -25,6 +28,11 @@ function App() {
         <Route path="/s/dashboard/posting/:id" element={<StudentPostingPage />} />
         {/* Recruiter Routes */}
         <Route path="/r/login" element={<RecruiterLoginPage />} />
+        <Route path="/r/verify" element={<RecruiterVerifyPage />} />
+        <Route path="/r/onboarding" element={<RecruiterOnboarding />} />
+        <Route path="/r/dashboard" element={<RecruiterDashboard />} />
+        <Route path="/recruiter/onboarding" element={<RecruiterOnboarding />} />
+        <Route path="/recruiter/dashboard" element={<RecruiterDashboard />} />
 
       </Routes>
     </BrowserRouter>

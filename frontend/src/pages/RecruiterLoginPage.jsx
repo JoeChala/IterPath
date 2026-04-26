@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "../css/LoginPage.css";
 
 const validateEmail = (email) => {
@@ -8,8 +7,6 @@ const validateEmail = (email) => {
 };
 
 function RecruiterLoginPage() {
-  const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [emailEmptyError, setEmailEmptyError] = useState(false);
   const [emailFormatError, setEmailFormatError] = useState(false);
@@ -38,7 +35,7 @@ function RecruiterLoginPage() {
     if (hasError) return;
 
     try {
-      const res = await fetch("http://localhost:5000/auth/recruiter/request", {
+      const res = await fetch("http://localhost:5000/api/auth/recruiter/request", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,11 +45,10 @@ function RecruiterLoginPage() {
 
       const data = await res.json();
 
-      if (data.success) {
-        alert("Login successful");
-        navigate("/r/dashboard");
+      if (res.ok) {
+        alert(data.message || "Login link sent");
       } else {
-        alert(data.message);
+        alert(data.message || data.error);
       }
     } catch (error) {
       console.error("Login error:", error);

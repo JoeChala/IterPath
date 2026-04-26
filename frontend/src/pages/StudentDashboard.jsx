@@ -1,79 +1,10 @@
 import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/StudentDashboard.css";
-import Dashboard_card from "../components/dashboard-card";
+import Dash_Card from "../components/dashboard-card";
 import { LogOut, Search, Loader2 } from "lucide-react";
 
-const MOCK_POSTINGS = [
-  {
-    id: 1,
-    company: "Google",
-    role: "Software Engineer",
-    deadline: "2026-04-20",
-    ctc: "45 LPA",
-    openings: 12,
-    website: "https://google.com",
-    description:
-      "Join Google's core engineering team working on large-scale distributed systems. You'll design, build, and maintain systems that serve billions of users globally.",
-    eligibility: {
-      cgpa: "8.0",
-      branches: ["CSE", "ISE", "ECE"],
-      backlogs: "No active backlogs",
-    },
-    applyLink: "https://careers.google.com",
-  },
-  {
-    id: 2,
-    company: "Microsoft",
-    role: "SDE - I",
-    deadline: "2026-04-25",
-    ctc: "40 LPA",
-    openings: 8,
-    website: "https://microsoft.com",
-    description:
-      "Work on Microsoft Azure infrastructure and developer tooling. Build reliable, scalable cloud services used by millions of enterprises worldwide.",
-    eligibility: {
-      cgpa: "7.5",
-      branches: ["CSE", "ISE", "ECE", "EEE"],
-      backlogs: "No active backlogs",
-    },
-    applyLink: "https://careers.microsoft.com",
-  },
-  {
-    id: 3,
-    company: "Flipkart",
-    role: "Backend Engineer",
-    deadline: "2026-05-01",
-    ctc: "28 LPA",
-    openings: 20,
-    website: "https://flipkart.com",
-    description:
-      "Build the backend systems powering India's largest e-commerce platform. Work on high-throughput APIs, payment systems, and order management pipelines.",
-    eligibility: {
-      cgpa: "7.0",
-      branches: ["CSE", "ISE", "ECE", "EEE", "MECH"],
-      backlogs: "Max 1 history backlog allowed",
-    },
-    applyLink: "https://careers.flipkart.com",
-  },
-  {
-    id: 4,
-    company: "Atlassian",
-    role: "Full Stack Developer",
-    deadline: "2026-05-10",
-    ctc: "35 LPA",
-    openings: 5,
-    website: "https://atlassian.com",
-    description:
-      "Contribute to Jira, Confluence, and Bitbucket — tools used by millions of developers. Work in small, autonomous teams with end-to-end ownership.",
-    eligibility: {
-      cgpa: "8.5",
-      branches: ["CSE", "ISE"],
-      backlogs: "No backlogs of any kind",
-    },
-    applyLink: "https://www.atlassian.com/company/careers",
-  },
-];
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 function daysLeft(deadline) {
   const diff = new Date(deadline) - new Date();
@@ -83,8 +14,34 @@ function daysLeft(deadline) {
 
 function StudentDashboard() {
   const navigate = useNavigate();
+  const [postings, setPostings] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+  const [jobsLoading, setJobsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/student/jobs`, {
+          credentials: "include",
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.message || "Failed to load postings");
+        }
+
+        setPostings(data.data || []);
+      } catch (err) {
+        setError(err.message || "Failed to load postings");
+      } finally {
+        setJobsLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, []);
 
   useEffect(() => {
     if (!search) {
@@ -101,7 +58,7 @@ function StudentDashboard() {
     return () => clearTimeout(timeout);
   }, [search]);
 
-  const filtered = MOCK_POSTINGS.filter(
+  const filtered = postings.filter(
     (p) =>
       p.company.toLowerCase().includes(search.toLowerCase()) ||
       p.role.toLowerCase().includes(search.toLowerCase()),
@@ -144,18 +101,21 @@ function StudentDashboard() {
 
         {/* Count */}
         <p className="dash-count">
-          {filtered.length} posting{filtered.length !== 1 ? "s" : ""} found
+          {jobsLoading
+            ? "Loading postings..."
+            : `${filtered.length} posting${filtered.length !== 1 ? "s" : ""} found`}
         </p>
 
         {/* List */}
         <div className="dash-list">
-          {filtered.length === 0 && (
+          {error && <p className="dash-empty">{error}</p>}
+          {!error && !jobsLoading && filtered.length === 0 && (
             <p className="dash-empty">No postings match your search.</p>
           )}
-          {filtered.map((posting, i) => {
+          {!error && filtered.map((posting, i) => {
             const days = daysLeft(posting.deadline);
             return (
-              <Dashboard_card isUrgent={days <= 5} daysLeft={days} posting={posting} index={i}></Dashboard_card>
+              <Dash_Card key={posting._id} isUrgent={days <= 5} daysLeft={days} posting={posting} index={i}></Dash_Card>
             );
           })}
         </div>

@@ -1,14 +1,14 @@
 import { useNavigate } from "react-router-dom";
 
-function Dashboard_card(props){
+function Dash_Card(props){
     const navigate = useNavigate();
     return (
       <div
-        key={props.posting.id}
+        key={props.posting._id}
         className="dash-card"
         style={{ animationDelay: `${props.index*50}ms` }}
         onClick={() =>
-            navigate(`/dashboard/posting/${props.posting.id}`, {
+            navigate(`/s/dashboard/posting/${props.posting._id}`, {
             state: { posting: props.posting },
           })
         }
@@ -34,4 +34,4 @@ function Dashboard_card(props){
       </div>
     )
 }
-export default Dashboard_card
+export default Dash_Card

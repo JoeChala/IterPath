@@ -21,7 +21,7 @@ function StudentRegisterPage() {
       return;
     }
 
-    const res = await fetch("http://localhost:5000/auth/students", {
+    const res = await fetch("http://localhost:5000/api/auth/students", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, usn, password }),
@@ -29,7 +29,7 @@ function StudentRegisterPage() {
     const data = await res.json();
     if (data.success) {
       alert("Student Registered");
-      navigate("/");
+      navigate("/s/login");
     } else {
       alert(data.message);
     }
@@ -116,7 +116,7 @@ function StudentRegisterPage() {
 
         <div className="register-footer">
           <span className="register-footer-text">Already a student?</span>
-          <button onClick={() => navigate("/")} className="register-btn-ghost">
+          <button onClick={() => navigate("/s/login")} className="register-btn-ghost">
             Sign In
           </button>
         </div>

@@ -12,9 +12,12 @@ const recruiterSchema = new mongoose.Schema({
     trim: true
   },
   companyId: { 
-    type: Number,
-    required: true,
-    trim: true
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Company",
+  },
+  company: {
+    type: String,
+    trim: true,
   },
   designation: {
     type: String,
@@ -37,6 +40,6 @@ const recruiterSchema = new mongoose.Schema({
     default: false,   // flips to true once they fill in their profile after first login
   },
 }, { timestamps: true });
-recruiterSchema.index({ email: 1, company: 1 }, { unique: true });
+recruiterSchema.index({ email: 1, companyId: 1 }, { unique: true });
 
 export default mongoose.model("Recruiter", recruiterSchema);
