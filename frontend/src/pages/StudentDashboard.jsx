@@ -1,7 +1,7 @@
 import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/StudentDashboard.css";
-import Dashboard_card from "../components/dashboard-card";
+import Dash_Card from "../components/dashboard-card";
 import { LogOut, Search, Loader2 } from "lucide-react";
 
 const MOCK_POSTINGS = [
@@ -155,7 +155,7 @@ function StudentDashboard() {
           {filtered.map((posting, i) => {
             const days = daysLeft(posting.deadline);
             return (
-              <Dashboard_card isUrgent={days <= 5} daysLeft={days} posting={posting} index={i}></Dashboard_card>
+              <Dash_Card isUrgent={days <= 5} daysLeft={days} posting={posting} index={i}></Dash_Card>
             );
           })}
         </div>

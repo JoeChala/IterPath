@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-function Dashboard_card(props){
+function Dash_Card(props){
     const navigate = useNavigate();
     return (
       <div
@@ -34,4 +34,4 @@ function Dashboard_card(props){
       </div>
     )
 }
-export default Dashboard_card
+export default Dash_Card
