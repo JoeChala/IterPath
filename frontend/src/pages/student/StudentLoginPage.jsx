@@ -59,7 +59,10 @@ function StudentLoginPage() {
         body: JSON.stringify({ email, password }),
       });
 
+      console.log("STATUS:", res.status);
+
       const data = await res.json();
+      console.log("RESPONSE:", data);
 
       if (data.success) {
         alert("Login successful");

@@ -25,7 +25,7 @@ export default function RecruiterDashboard() {
   const renderContent = () => {
     if (activeTab === "dashboard") return <DashboardStats />;
     if (activeTab === "jobs")
-      return <JobList setSelectedJob={setSelectedJob} />;
+      return <JobList setActiveTab={setActiveTab} setSelectedJob={setSelectedJob} />;
     if (activeTab === "applicants")
       return <ApplicantsList selectedJob={selectedJob} />;
   };

@@ -31,6 +31,8 @@ export const getMe = async (req, res) => {
       isOnboarded: user.isOnboarded || false,
       company: user.companyId?.name || user.company || null,
       name: user.name || null,
+      usn: user.usn || null,
+      resumeDetails: user.resumeDetails || null,
     });
 
   } catch (err) {

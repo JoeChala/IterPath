@@ -5,7 +5,11 @@ const studentSchema = new mongoose.Schema({
   usn: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  resume: { type: Object }
+  resume: { type: Object },
+  resumeDetails: {
+    type: mongoose.Schema.Types.Mixed,
+    default: null,
+  },
 }, { timestamps: true });
 
 export default mongoose.model("Student", studentSchema);

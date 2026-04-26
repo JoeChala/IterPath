@@ -1,6 +1,7 @@
 import Recruiter from "../models/recruiter.model.js";
 import CompanyDB from "../models/company.model.js"
 import Job from "../models/jobs.model.js";
+import Application from "../models/application.model.js";
 import * as recruiterService from "../services/recruiter.service.js";
 
 export const completeProfile =  async (req,res) => {
@@ -111,12 +112,20 @@ export const getRecruiterDashboard = async (req, res) => {
         const company = recruiter?.company;
 
         const jobs = company ? await Job.find({ company }) : [];
+        const jobIds = jobs.map((job) => job._id);
         const totalJobs = jobs.length;
+        const totalApplicants = await Application.countDocuments({
+            job: { $in: jobIds },
+        });
+        const shortlisted = await Application.countDocuments({
+            job: { $in: jobIds },
+            status: "shortlisted",
+        });
 
         res.status(200).json({
             totalJobs,
-            totalApplicants: 0,
-            shortlisted: 0,
+            totalApplicants,
+            shortlisted,
         });
     } catch (err) {
         res.status(500).json({
@@ -228,9 +237,76 @@ export const deleteJobListing = async (req, res) => {
             });
         }
 
+        await Application.deleteMany({ job: deletedJob._id });
+
         res.status(200).json({
             success: true,
             message: "Job deleted"
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "Server Error"
+        });
+    }
+};
+
+export const getApplicantsForJob = async (req, res) => {
+    try {
+        const recruiter = await Recruiter.findById(req.user.id);
+        const job = await Job.findOne({
+            _id: req.params.jobId,
+            company: recruiter?.company,
+        });
+
+        if (!job) {
+            return res.status(404).json({
+                success: false,
+                message: "Job not found"
+            });
+        }
+
+        const applications = await Application.find({ job: job._id })
+            .populate("student", "name usn email resume")
+            .sort({ createdAt: -1 });
+
+        res.status(200).json(applications);
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "Server Error"
+        });
+    }
+};
+
+export const updateApplicationStatus = async (req, res) => {
+    try {
+        const { status } = req.body;
+
+        if (!["applied", "shortlisted", "rejected"].includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid application status"
+            });
+        }
+
+        const recruiter = await Recruiter.findById(req.user.id);
+        const application = await Application.findById(req.params.id).populate("job");
+
+        if (!application || application.job?.company !== recruiter?.company) {
+            return res.status(404).json({
+                success: false,
+                message: "Application not found"
+            });
+        }
+
+        application.status = status;
+        await application.save();
+        await application.populate("student", "name usn email resume");
+
+        res.status(200).json({
+            success: true,
+            data: application,
         });
     } catch (err) {
         res.status(500).json({

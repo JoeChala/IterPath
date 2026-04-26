@@ -11,6 +11,8 @@ function StudentPostingPage() {
   const [posting, setPosting] = useState(state?.posting || null);
   const [loading, setLoading] = useState(!state?.posting);
   const [error, setError] = useState("");
+  const [applying, setApplying] = useState(false);
+  const [applyMessage, setApplyMessage] = useState("");
 
   useEffect(() => {
     if (posting || !id) return;
@@ -59,6 +61,29 @@ function StudentPostingPage() {
     (new Date(posting.deadline) - new Date()) / (1000 * 60 * 60 * 24),
   );
   const urgent = days <= 5;
+
+  const handleApply = async () => {
+    setApplying(true);
+    setApplyMessage("");
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/student/jobs/${posting._id}/apply`, {
+        method: "POST",
+        credentials: "include",
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Could not submit application");
+      }
+
+      setApplyMessage(data.message || "Application submitted");
+    } catch (err) {
+      setApplyMessage(err.message || "Could not submit application");
+    } finally {
+      setApplying(false);
+    }
+  };
 
   return (
     <div className="detail-page">
@@ -155,15 +180,17 @@ function StudentPostingPage() {
 
         <div className="detail-divider" />
 
-        {/* Apply */}
-        <a
-          href={posting.applyLink}
-          target="_blank"
-          rel="noreferrer"
+        <button
+          type="button"
           className="detail-apply-btn"
+          disabled={applying}
+          onClick={handleApply}
         >
-          Apply Now →
-        </a>
+          {applying ? "Applying..." : "Apply Now →"}
+        </button>
+        {applyMessage && (
+          <p className="detail-apply-message">{applyMessage}</p>
+        )}
       </div>
     </div>
   );

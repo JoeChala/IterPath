@@ -18,7 +18,66 @@
   min-height: 100vh;
   background: var(--background);
   font-family: var(--font-sans);
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  padding: 0;
+}
+
+.dash-sidebar {
+  min-height: 100vh;
+  border-right: 1px solid var(--border);
+  background: #111;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+.dash-sidebar-title {
+  color: var(--foreground);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.dash-sidebar-subtitle {
+  color: var(--muted-foreground);
+  font-size: 0.78rem;
+  margin: 0.5rem 0 1.75rem;
+}
+
+.dash-nav {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.dash-nav-button {
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted-foreground);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.dash-nav-button:hover,
+.dash-nav-button.active {
+  background: var(--muted);
+  border-color: var(--border);
+  color: var(--foreground);
+}
+
+.dash-main {
+  min-width: 0;
   padding: 2rem 1.5rem;
+  box-sizing: border-box;
 }
 
 .dash-container {
@@ -246,4 +305,129 @@
 .dash-card:hover .dash-card-arrow {
   transform: translateX(3px);
   color: var(--foreground);
+}
+
+.dash-profile-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 1.25rem;
+}
+
+.dash-profile-grid {
+  display: grid;
+  gap: 0;
+  border: 1px solid var(--border);
+}
+
+.dash-profile-row {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  border-bottom: 1px solid var(--border);
+}
+
+.dash-profile-row:last-child {
+  border-bottom: none;
+}
+
+.dash-profile-key {
+  color: var(--muted-foreground);
+  background: var(--muted);
+  border-right: 1px solid var(--border);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.75rem 1rem;
+}
+
+.dash-profile-value {
+  color: var(--foreground);
+  font-size: 0.85rem;
+  padding: 0.75rem 1rem;
+  overflow-wrap: anywhere;
+}
+
+.dash-resume-panel {
+  border-top: 1px solid var(--border);
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+}
+
+.dash-resume-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.dash-profile-section-title {
+  color: var(--foreground);
+  font-size: 1rem;
+  margin: 0 0 0.35rem;
+}
+
+.dash-profile-help,
+.dash-resume-message {
+  color: var(--muted-foreground);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.dash-resume-message {
+  margin-bottom: 1rem;
+}
+
+.dash-upload-button {
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 0.65rem 0.85rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.dash-upload-button:hover {
+  border-color: var(--foreground);
+}
+
+.dash-upload-button input {
+  display: none;
+}
+
+@media (max-width: 820px) {
+  .dash-page {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-sidebar {
+    min-height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dash-nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dash-nav-button {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .dash-topbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .dash-logout {
+    justify-content: center;
+    width: 100%;
+  }
 }

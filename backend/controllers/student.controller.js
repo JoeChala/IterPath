@@ -1,11 +1,33 @@
 import Student from "../models/student.model.js";
 import Job from "../models/jobs.model.js";
+import Application from "../models/application.model.js";
 import bcrypt from "bcrypt";
 import { signSessionToken } from "../utils/jwt.util.js";
+import { processResume } from "../services/resume.service.js";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const pdf = require("pdf-parse");
+import fs from "fs";
+
+export const parseResume = async (req, res) => {
+  try {
+    const buffer = req.file.buffer;
+
+    const pdfData = await pdf(buffer); 
+
+    const parsed = await processResume(pdfData.text);
+
+    res.json(parsed);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to parse resume" });
+  }
+};
 
 export const loginStudent = async (req, res) => {
   const { email, password } = req.body;
-
+  console.log(req.body);
   try {
     const student = await Student.findOne({ email });
 
@@ -142,6 +164,85 @@ export const getJobPostingById = async (req, res) => {
     res.status(400).json({
       success: false,
       message: "Invalid job posting"
+    });
+  }
+};
+
+export const applyToJob = async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id);
+
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: "Job posting not found"
+      });
+    }
+
+    const existingApplication = await Application.findOne({
+      job: job._id,
+      student: req.user.id,
+    });
+
+    if (existingApplication) {
+      return res.status(409).json({
+        success: false,
+        message: "You have already applied to this job"
+      });
+    }
+
+    const application = await Application.create({
+      job: job._id,
+      student: req.user.id,
+      status: "applied",
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Application submitted",
+      data: application,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error"
+    });
+  }
+};
+
+export const uploadResumeDetails = async (req, res) => {
+  const { fileName, text } = req.body;
+
+  if (!text || typeof text !== "string") {
+    return res.status(400).json({
+      success: false,
+      message: "Could not read resume text from uploaded file"
+    });
+  }
+
+  try {
+    const resumeDetails = extractResumeDetails(text, fileName || "resume");
+    const student = await Student.findByIdAndUpdate(
+      req.user.id,
+      {
+        resume: {
+          fileName: fileName || "resume",
+          uploadedAt: new Date(),
+        },
+        resumeDetails,
+      },
+      { returnDocument: "after" }
+    ).select("-password");
+
+    res.status(200).json({
+      success: true,
+      message: "Resume details saved",
+      data: student.resumeDetails,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error"
     });
   }
 };

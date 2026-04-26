@@ -5,19 +5,28 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000
 
 export default function ApplicantsList({ selectedJob }) {
   const [applicants, setApplicants] = useState([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!selectedJob) return;
 
+    setError("");
     fetch(`${API_BASE_URL}/api/recruiter/applicants/${selectedJob}`, {
       credentials: "include",
     })
       .then(res => res.json())
-      .then(data => setApplicants(data));
+      .then(data => {
+        if (Array.isArray(data)) {
+          setApplicants(data);
+        } else {
+          setApplicants([]);
+          setError(data.message || "Could not load applicants");
+        }
+      });
   }, [selectedJob]);
 
   const updateStatus = async (id, status) => {
-    await fetch(`${API_BASE_URL}/api/recruiter/applications/${id}/status`, {
+    const res = await fetch(`${API_BASE_URL}/api/recruiter/applications/${id}/status`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -25,6 +34,16 @@ export default function ApplicantsList({ selectedJob }) {
       credentials: "include",
       body: JSON.stringify({ status }),
     });
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.message || "Could not update status");
+      return;
+    }
+
+    setApplicants((current) =>
+      current.map((app) => (app._id === id ? data.data : app))
+    );
   };
 
   if (!selectedJob) {
@@ -40,7 +59,8 @@ export default function ApplicantsList({ selectedJob }) {
       <h2 className="recruiter-section-title">Applicants</h2>
 
       <div className="recruiter-list">
-        {applicants.length === 0 && (
+        {error && <p className="recruiter-error">{error}</p>}
+        {!error && applicants.length === 0 && (
           <p className="recruiter-muted-text">No applicants yet.</p>
         )}
 
@@ -49,6 +69,9 @@ export default function ApplicantsList({ selectedJob }) {
             <h3 className="recruiter-list-title">
               {app.student?.name || "Unnamed applicant"}
             </h3>
+            <p className="recruiter-list-meta">
+              {app.student?.usn || "No USN"} · {app.student?.email || "No email"}
+            </p>
             <p className="recruiter-list-meta">Status: {app.status}</p>
 
             <div className="recruiter-actions">
