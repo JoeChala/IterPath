@@ -27,7 +27,7 @@ export default function RecruiterDashboard() {
     if (activeTab === "jobs")
       return <JobList setActiveTab={setActiveTab} setSelectedJob={setSelectedJob} />;
     if (activeTab === "applicants")
-      return <ApplicantsList selectedJob={selectedJob} />;
+      return <ApplicantsList selectedJob={selectedJob} setSelectedJob={setSelectedJob} />;
   };
 
   return (

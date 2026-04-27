@@ -15,6 +15,6 @@ router.use(authenticateSession, requireRole("student"));
 router.get("/jobs", getJobPostings);
 router.get("/jobs/:id", getJobPostingById);
 router.post("/jobs/:id/apply", applyToJob);
-//router.post("/resume/parse",upload.single("resume"), parseResume);
+router.post("/resume/parse", upload.single("resume"), parseResume);
 
 export default router;

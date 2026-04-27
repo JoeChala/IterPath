@@ -267,7 +267,7 @@ export const getApplicantsForJob = async (req, res) => {
         }
 
         const applications = await Application.find({ job: job._id })
-            .populate("student", "name usn email resume")
+            .populate("student", "name usn email resume resumeDetails")
             .sort({ createdAt: -1 });
 
         res.status(200).json(applications);
@@ -302,7 +302,7 @@ export const updateApplicationStatus = async (req, res) => {
 
         application.status = status;
         await application.save();
-        await application.populate("student", "name usn email resume");
+        await application.populate("student", "name usn email resume resumeDetails");
 
         res.status(200).json({
             success: true,

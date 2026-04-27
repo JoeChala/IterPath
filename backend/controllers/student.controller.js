@@ -11,17 +11,43 @@ import fs from "fs";
 
 export const parseResume = async (req, res) => {
   try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: "No file uploaded" });
+    }
+    
+    let text = "";
     const buffer = req.file.buffer;
+    
+    if (req.file.mimetype === "application/pdf") {
+      const pdfData = await pdf(buffer);
+      text = pdfData.text;
+    } else {
+      text = buffer.toString("utf-8");
+    }
 
-    const pdfData = await pdf(buffer); 
+    const parsed = await processResume(text);
+    
+    const student = await Student.findByIdAndUpdate(
+      req.user.id,
+      {
+        resume: {
+          fileName: req.file.originalname || "resume",
+          uploadedAt: new Date(),
+        },
+        resumeDetails: parsed,
+      },
+      { returnDocument: "after" }
+    ).select("-password");
 
-    const parsed = await processResume(pdfData.text);
-
-    res.json(parsed);
+    res.status(200).json({
+      success: true,
+      message: "Resume parsed and saved successfully",
+      data: student.resumeDetails
+    });
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to parse resume" });
+    res.status(500).json({ success: false, message: "Failed to parse resume" });
   }
 };
 
