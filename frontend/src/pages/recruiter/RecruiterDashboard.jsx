@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import RecruiterSidebar from "../../components/recruiter/RecruiterSidebar";
@@ -11,8 +11,32 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000
 
 export default function RecruiterDashboard() {
   const navigate = useNavigate();
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [activeTab, setActiveTab] = useState("dashboard");
   const [selectedJob, setSelectedJob] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    const check = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/auth/me`, { credentials: "include" });
+        if (!res.ok) throw new Error("unauth");
+        const data = await res.json();
+        if (active && data.role !== "recruiter") {
+          navigate("/r/login", { replace: true });
+        }
+      } catch {
+        if (active) navigate("/r/login", { replace: true });
+      } finally {
+        if (active) setCheckingAuth(false);
+      }
+    };
+
+    check();
+    return () => {
+      active = false;
+    };
+  }, [navigate]);
 
   const handleLogout = async () => {
     await fetch(`${API_BASE_URL}/api/auth/logout`, {
@@ -29,6 +53,14 @@ export default function RecruiterDashboard() {
     if (activeTab === "applicants")
       return <ApplicantsList selectedJob={selectedJob} setSelectedJob={setSelectedJob} />;
   };
+
+  if (checkingAuth) {
+    return (
+      <div style={{ minHeight: "100vh", display: "grid", placeItems: "center" }}>
+        <p>Checking access...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="recruiter-dashboard-page">

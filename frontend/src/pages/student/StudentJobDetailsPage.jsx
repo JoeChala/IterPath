@@ -60,7 +60,8 @@ function StudentPostingPage() {
   const days = Math.ceil(
     (new Date(posting.deadline) - new Date()) / (1000 * 60 * 60 * 24),
   );
-  const urgent = days <= 5;
+  const urgent = days > 0 && days <= 5;
+  const isClosed = days <= 0;
 
   const handleApply = async () => {
     setApplying(true);
@@ -183,11 +184,14 @@ function StudentPostingPage() {
         <button
           type="button"
           className="detail-apply-btn"
-          disabled={applying}
+            disabled={applying || isClosed}
           onClick={handleApply}
         >
-          {applying ? "Applying..." : "Apply Now →"}
+            {isClosed ? "Deadline passed" : applying ? "Applying..." : "Apply Now →"}
         </button>
+          {isClosed && (
+            <p className="detail-apply-message">This job is closed and no longer accepts applications.</p>
+          )}
         {applyMessage && (
           <p className="detail-apply-message">{applyMessage}</p>
         )}

@@ -10,6 +10,7 @@ import RecruiterLoginPage from "./pages/recruiter/RecruiterLoginPage.jsx";
 import RecruiterVerifyPage from "./pages/recruiter/RecruiterVerifyPage.jsx";
 import RecruiterOnboarding from "./pages/recruiter/RecruiterOnboarding.jsx";
 import RecruiterDashboard from "./pages/recruiter/RecruiterDashboard.jsx";
+// Frontend route guards removed — backend enforces auth/roles
 
 function App() {
   return (

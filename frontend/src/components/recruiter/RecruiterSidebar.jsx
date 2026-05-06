@@ -13,17 +13,21 @@ export default function RecruiterSidebar({ activeTab, setActiveTab }) {
       <p className="recruiter-sidebar-subtitle">Recruiter workspace</p>
 
       <nav className="recruiter-nav">
-        {navItems.map(({ id, label, Icon }) => (
-          <button
-            key={id}
-            className={`recruiter-nav-button ${activeTab === id ? "active" : ""}`}
-            onClick={() => setActiveTab(id)}
-            type="button"
-          >
-            <Icon size={18} />
-            <span>{label}</span>
-          </button>
-        ))}
+        {navItems.map((item) => {
+          const NavIcon = item.Icon;
+
+          return (
+            <button
+              key={item.id}
+              className={`recruiter-nav-button ${activeTab === item.id ? "active" : ""}`}
+              onClick={() => setActiveTab(item.id)}
+              type="button"
+            >
+              <NavIcon size={18} />
+              <span>{item.label}</span>
+            </button>
+          );
+        })}
       </nav>
     </aside>
   );

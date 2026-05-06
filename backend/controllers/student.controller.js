@@ -9,6 +9,49 @@ const require = createRequire(import.meta.url);
 const pdf = require("pdf-parse");
 import fs from "fs";
 
+const normalizeResumeDetails = (resumeDetails = {}) => {
+  const toList = (value) => {
+    if (Array.isArray(value)) {
+      return value.map((item) => String(item).trim()).filter(Boolean);
+    }
+
+    if (typeof value === "string") {
+      return value
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    return [];
+  };
+
+  return {
+    ...resumeDetails,
+    email: resumeDetails.email?.trim() || "",
+    phone: resumeDetails.phone?.trim() || "",
+    cgpa: resumeDetails.cgpa?.toString().trim() || "",
+    skills: toList(resumeDetails.skills),
+    links: toList(resumeDetails.links),
+  };
+};
+
+const saveResumeDetails = async (studentId, resumeDetails, resumeMeta = {}) => {
+  const student = await Student.findById(studentId).select("resume");
+
+  return Student.findByIdAndUpdate(
+    studentId,
+    {
+      resume: {
+        fileName: resumeMeta.fileName || student?.resume?.fileName || "resume",
+        uploadedAt: student?.resume?.uploadedAt || resumeMeta.uploadedAt || new Date(),
+        updatedAt: new Date(),
+      },
+      resumeDetails: normalizeResumeDetails(resumeDetails),
+    },
+    { returnDocument: "after" }
+  ).select("-password");
+};
+
 export const parseResume = async (req, res) => {
   try {
     if (!req.file) {
@@ -27,17 +70,10 @@ export const parseResume = async (req, res) => {
 
     const parsed = await processResume(text);
     
-    const student = await Student.findByIdAndUpdate(
-      req.user.id,
-      {
-        resume: {
-          fileName: req.file.originalname || "resume",
-          uploadedAt: new Date(),
-        },
-        resumeDetails: parsed,
-      },
-      { returnDocument: "after" }
-    ).select("-password");
+    const student = await saveResumeDetails(req.user.id, parsed, {
+      fileName: req.file.originalname || "resume",
+      uploadedAt: new Date(),
+    });
 
     res.status(200).json({
       success: true,
@@ -53,7 +89,6 @@ export const parseResume = async (req, res) => {
 
 export const loginStudent = async (req, res) => {
   const { email, password } = req.body;
-  console.log(req.body);
   try {
     const student = await Student.findOne({ email });
 
@@ -205,6 +240,13 @@ export const applyToJob = async (req, res) => {
       });
     }
 
+    if (new Date(job.deadline).getTime() < Date.now()) {
+      return res.status(410).json({
+        success: false,
+        message: "Application deadline has passed"
+      });
+    }
+
     const existingApplication = await Application.findOne({
       job: job._id,
       student: req.user.id,
@@ -237,32 +279,49 @@ export const applyToJob = async (req, res) => {
 };
 
 export const uploadResumeDetails = async (req, res) => {
-  const { fileName, text } = req.body;
+  const { fileName, resumeDetails } = req.body;
 
-  if (!text || typeof text !== "string") {
+  if (!resumeDetails || typeof resumeDetails !== "object") {
     return res.status(400).json({
       success: false,
-      message: "Could not read resume text from uploaded file"
+      message: "Could not read resume details"
     });
   }
 
   try {
-    const resumeDetails = extractResumeDetails(text, fileName || "resume");
-    const student = await Student.findByIdAndUpdate(
-      req.user.id,
-      {
-        resume: {
-          fileName: fileName || "resume",
-          uploadedAt: new Date(),
-        },
-        resumeDetails,
-      },
-      { returnDocument: "after" }
-    ).select("-password");
+    const student = await saveResumeDetails(req.user.id, resumeDetails, {
+      fileName: fileName || "resume",
+    });
 
     res.status(200).json({
       success: true,
       message: "Resume details saved",
+      data: student.resumeDetails,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error"
+    });
+  }
+};
+
+export const updateResumeDetails = async (req, res) => {
+  const { resumeDetails } = req.body;
+
+  if (!resumeDetails || typeof resumeDetails !== "object") {
+    return res.status(400).json({
+      success: false,
+      message: "Resume details are required"
+    });
+  }
+
+  try {
+    const student = await saveResumeDetails(req.user.id, resumeDetails);
+
+    res.status(200).json({
+      success: true,
+      message: "Resume details updated",
       data: student.resumeDetails,
     });
   } catch (error) {

@@ -32,6 +32,7 @@ export const getMe = async (req, res) => {
       company: user.companyId?.name || user.company || null,
       name: user.name || null,
       usn: user.usn || null,
+      resume: user.resume || null,
       resumeDetails: user.resumeDetails || null,
     });
 

@@ -1,14 +1,39 @@
-import { useState,useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/StudentDashboard.css";
 import Dash_Card from "../../components/dashboard-card";
-import { BriefcaseBusiness, LogOut, Search, Loader2, Upload, User } from "lucide-react";
+import { BriefcaseBusiness, Edit2, Loader2, LogOut, Save, Search, Upload, User, X } from "lucide-react";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 function daysLeft(deadline) {
   const diff = new Date(deadline) - new Date();
   const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
   return days;
+}
+
+function buildResumeDraft(details = {}) {
+  return {
+    email: details.email || "",
+    phone: details.phone || "",
+    cgpa: details.cgpa ?? "",
+    skills: Array.isArray(details.skills) ? details.skills.join(", ") : "",
+    links: Array.isArray(details.links) ? details.links.join(", ") : "",
+  };
+}
+
+function toList(value) {
+  if (Array.isArray(value)) {
+    return value.map((item) => String(item).trim()).filter(Boolean);
+  }
+
+  if (typeof value === "string") {
+    return value
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  return [];
 }
 
 function StudentDashboard() {
@@ -18,6 +43,9 @@ function StudentDashboard() {
   const [profileError, setProfileError] = useState("");
   const [resumeUploading, setResumeUploading] = useState(false);
   const [resumeMessage, setResumeMessage] = useState("");
+  const [isEditingResume, setIsEditingResume] = useState(false);
+  const [resumeSaving, setResumeSaving] = useState(false);
+  const [resumeDraft, setResumeDraft] = useState(buildResumeDraft());
   const [postings, setPostings] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
@@ -69,6 +97,10 @@ function StudentDashboard() {
   }, []);
 
   useEffect(() => {
+    setResumeDraft(buildResumeDraft(profile?.resumeDetails || {}));
+  }, [profile?.resumeDetails]);
+
+  useEffect(() => {
     if (!search) {
       setLoading(false);
       return;
@@ -108,14 +140,12 @@ function StudentDashboard() {
     setResumeMessage("");
 
     try {
-      const text = await file.text();
       const res = await fetch(`${API_BASE_URL}/api/student/resume/parse`, {
         method: "POST",
         credentials: "include",
         body: formData,
       });
       const data = await res.json();
-      console.log(data)
 
       if (!res.ok) {
         throw new Error(data.message || "Could not upload resume");
@@ -123,8 +153,14 @@ function StudentDashboard() {
 
       setProfile((current) => ({
         ...current,
+        resume: {
+          fileName: file.name,
+          uploadedAt: new Date().toISOString(),
+        },
         resumeDetails: data.data,
       }));
+      setIsEditingResume(false);
+      setResumeDraft(buildResumeDraft(data.data));
       setResumeMessage(data.message || "Resume details saved");
     } catch (err) {
       setResumeMessage(err.message || "Could not upload resume");
@@ -133,6 +169,56 @@ function StudentDashboard() {
       event.target.value = "";
     }
   };
+
+  const handleResumeChange = (field, value) => {
+    setResumeDraft((current) => ({
+      ...current,
+      [field]: value,
+    }));
+  };
+
+  const handleResumeSave = async () => {
+    setResumeSaving(true);
+    setResumeMessage("");
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/student/resume/details`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          resumeDetails: {
+            ...resumeDraft,
+            skills: toList(resumeDraft.skills),
+            links: toList(resumeDraft.links),
+          },
+        }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Could not update resume details");
+      }
+
+      setProfile((current) => ({
+        ...current,
+        resumeDetails: data.data,
+      }));
+      setIsEditingResume(false);
+      setResumeMessage(data.message || "Resume details updated");
+    } catch (err) {
+      setResumeMessage(err.message || "Could not update resume details");
+    } finally {
+      setResumeSaving(false);
+    }
+  };
+
+  const resumeDetails = profile?.resumeDetails || null;
+  const resumeSkills = resumeDetails?.skills || [];
+  const resumeLinks = resumeDetails?.links || [];
+  const resumeLastUpdated = profile?.resume?.updatedAt || profile?.resume?.uploadedAt;
 
   return (
     <div className="dash-page">
@@ -253,67 +339,173 @@ function StudentDashboard() {
                       <div>
                         <h2 className="dash-profile-section-title">Resume Details</h2>
                         <p className="dash-profile-help">
-                          Upload a text-based resume to extract skills and contact details.
+                          Upload a resume, then fine-tune the extracted details below.
                         </p>
                       </div>
-                      <label className="dash-upload-button">
-                        <Upload size={15} />
-                        <span>{resumeUploading ? "Reading..." : "Upload Resume"}</span>
-                        <input
-                          type="file"
-                          accept=".txt,.pdf,.doc,.docx"
-                          onChange={handleResumeUpload}
-                          disabled={resumeUploading}
-                        />
-                      </label>
+                      <div className="dash-resume-actions">
+                        {resumeDetails && !isEditingResume && (
+                          <button
+                            type="button"
+                            className="dash-secondary-button"
+                            onClick={() => setIsEditingResume(true)}
+                          >
+                            <Edit2 size={15} />
+                            <span>Edit details</span>
+                          </button>
+                        )}
+                        {isEditingResume && (
+                          <>
+                            <button
+                              type="button"
+                              className="dash-secondary-button"
+                              onClick={() => {
+                                setIsEditingResume(false);
+                                setResumeDraft(buildResumeDraft(profile?.resumeDetails || {}));
+                              }}
+                            >
+                              <X size={15} />
+                              <span>Cancel</span>
+                            </button>
+                            <button
+                              type="button"
+                              className="dash-primary-button"
+                              onClick={handleResumeSave}
+                              disabled={resumeSaving}
+                            >
+                              <Save size={15} />
+                              <span>{resumeSaving ? "Saving..." : "Save changes"}</span>
+                            </button>
+                          </>
+                        )}
+                        <label className="dash-upload-button">
+                          <Upload size={15} />
+                          <span>{resumeUploading ? "Reading..." : "Upload Resume"}</span>
+                          <input
+                            type="file"
+                            accept=".txt,.pdf,.doc,.docx"
+                            onChange={handleResumeUpload}
+                            disabled={resumeUploading}
+                          />
+                        </label>
+                      </div>
                     </div>
 
                     {resumeMessage && (
                       <p className="dash-resume-message">{resumeMessage}</p>
                     )}
 
-                    {profile.resumeDetails ? (
-                      <div className="dash-profile-grid">
-                        <div className="dash-profile-row">
-                          <span className="dash-profile-key">File</span>
-                          <span className="dash-profile-value">
-                            {profile.resumeDetails.fileName || "resume"}
-                          </span>
+                    {resumeDetails ? (
+                      <div className="dash-resume-layout">
+                        <div className="dash-resume-summary">
+                          <div className="dash-resume-summary-top">
+                            <div>
+                              <p className="dash-resume-label">Uploaded resume</p>
+                              <h3 className="dash-resume-title">
+                                {profile.resume?.fileName || "resume"}
+                              </h3>
+                            </div>
+                            {resumeLastUpdated && (
+                              <span className="dash-resume-meta">
+                                Updated {new Date(resumeLastUpdated).toLocaleDateString("en-IN", {
+                                  day: "numeric",
+                                  month: "short",
+                                  year: "numeric",
+                                })}
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="dash-resume-grid">
+                            <div className="dash-resume-field">
+                              <span className="dash-profile-key">Email</span>
+                              <span className="dash-profile-value">{resumeDetails.email || "Not found"}</span>
+                            </div>
+                            <div className="dash-resume-field">
+                              <span className="dash-profile-key">Phone</span>
+                              <span className="dash-profile-value">{resumeDetails.phone || "Not found"}</span>
+                            </div>
+                            <div className="dash-resume-field">
+                              <span className="dash-profile-key">CGPA</span>
+                              <span className="dash-profile-value">{resumeDetails.cgpa || "Not found"}</span>
+                            </div>
+                            <div className="dash-resume-field">
+                              <span className="dash-profile-key">Skills</span>
+                              <div className="dash-chip-list">
+                                {resumeSkills.length ? (
+                                  resumeSkills.map((skill) => (
+                                    <span key={skill} className="dash-chip">{skill}</span>
+                                  ))
+                                ) : (
+                                  <span className="dash-profile-value">No skills detected</span>
+                                )}
+                              </div>
+                            </div>
+                            <div className="dash-resume-field dash-resume-field-wide">
+                              <span className="dash-profile-key">Links</span>
+                              <div className="dash-chip-list">
+                                {resumeLinks.length ? (
+                                  resumeLinks.map((link) => (
+                                    <a key={link} className="dash-link-chip" href={link} target="_blank" rel="noreferrer">
+                                      {link}
+                                    </a>
+                                  ))
+                                ) : (
+                                  <span className="dash-profile-value">No links detected</span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <div className="dash-profile-row">
-                          <span className="dash-profile-key">Email</span>
-                          <span className="dash-profile-value">
-                            {profile.resumeDetails.email || "Not found"}
-                          </span>
-                        </div>
-                        <div className="dash-profile-row">
-                          <span className="dash-profile-key">Phone</span>
-                          <span className="dash-profile-value">
-                            {profile.resumeDetails.phone || "Not found"}
-                          </span>
-                        </div>
-                        <div className="dash-profile-row">
-                          <span className="dash-profile-key">CGPA</span>
-                          <span className="dash-profile-value">
-                            {profile.resumeDetails.cgpa ?? "Not found"}
-                          </span>
-                        </div>
-                        <div className="dash-profile-row">
-                          <span className="dash-profile-key">Skills</span>
-                          <span className="dash-profile-value">
-                            {profile.resumeDetails.skills?.length
-                              ? profile.resumeDetails.skills.join(", ")
-                              : "No skills detected"}
-                          </span>
-                        </div>
-                        <div className="dash-profile-row">
-                          <span className="dash-profile-key">Links</span>
-                          <span className="dash-profile-value">
-                            {profile.resumeDetails.links?.length
-                              ? profile.resumeDetails.links.join(", ")
-                              : "No links detected"}
-                          </span>
-                        </div>
+
+                        {isEditingResume && (
+                          <div className="dash-resume-editor">
+                            <h3 className="dash-resume-editor-title">Edit parsed details</h3>
+                            <div className="dash-resume-editor-grid">
+                              <label className="dash-resume-input-group">
+                                <span>Email</span>
+                                <input
+                                  value={resumeDraft.email}
+                                  onChange={(e) => handleResumeChange("email", e.target.value)}
+                                  className="dash-resume-input"
+                                />
+                              </label>
+                              <label className="dash-resume-input-group">
+                                <span>Phone</span>
+                                <input
+                                  value={resumeDraft.phone}
+                                  onChange={(e) => handleResumeChange("phone", e.target.value)}
+                                  className="dash-resume-input"
+                                />
+                              </label>
+                              <label className="dash-resume-input-group">
+                                <span>CGPA</span>
+                                <input
+                                  value={resumeDraft.cgpa}
+                                  onChange={(e) => handleResumeChange("cgpa", e.target.value)}
+                                  className="dash-resume-input"
+                                />
+                              </label>
+                              <label className="dash-resume-input-group dash-resume-input-group-wide">
+                                <span>Skills, separated by commas</span>
+                                <textarea
+                                  value={resumeDraft.skills}
+                                  onChange={(e) => handleResumeChange("skills", e.target.value)}
+                                  className="dash-resume-textarea"
+                                  rows={3}
+                                />
+                              </label>
+                              <label className="dash-resume-input-group dash-resume-input-group-wide">
+                                <span>Links, separated by commas</span>
+                                <textarea
+                                  value={resumeDraft.links}
+                                  onChange={(e) => handleResumeChange("links", e.target.value)}
+                                  className="dash-resume-textarea"
+                                  rows={3}
+                                />
+                              </label>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <p className="dash-empty">No resume details uploaded yet.</p>

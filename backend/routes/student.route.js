@@ -4,6 +4,7 @@ import {
   getJobPostingById,
   getJobPostings,
   parseResume,
+  updateResumeDetails,
 } from "../controllers/student.controller.js";
 import upload from "../config/multer.js"; 
 import { authenticateSession, requireRole } from "../middleware/auth.middleware.js";
@@ -16,5 +17,6 @@ router.get("/jobs", getJobPostings);
 router.get("/jobs/:id", getJobPostingById);
 router.post("/jobs/:id/apply", applyToJob);
 router.post("/resume/parse", upload.single("resume"), parseResume);
+router.put("/resume/details", updateResumeDetails);
 
 export default router;

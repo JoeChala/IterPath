@@ -360,6 +360,47 @@
   margin-bottom: 1rem;
 }
 
+.dash-resume-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.dash-secondary-button,
+.dash-primary-button {
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 0.65rem 0.85rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: transparent;
+  font-family: var(--font-sans);
+}
+
+.dash-primary-button {
+  background: var(--foreground);
+  color: var(--background);
+  border-color: var(--foreground);
+}
+
+.dash-secondary-button:hover,
+.dash-primary-button:hover {
+  opacity: 0.85;
+}
+
+.dash-primary-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 .dash-profile-section-title {
   color: var(--foreground);
   font-size: 1rem;
@@ -401,6 +442,128 @@
   display: none;
 }
 
+.dash-resume-layout {
+  display: grid;
+  gap: 1rem;
+}
+
+.dash-resume-summary,
+.dash-resume-editor {
+  border: 1px solid var(--border);
+  background: var(--muted);
+  padding: 1rem;
+}
+
+.dash-resume-summary-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.dash-resume-label,
+.dash-resume-editor-title {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.dash-resume-title {
+  margin: 0.35rem 0 0;
+  color: var(--foreground);
+  font-size: 1rem;
+}
+
+.dash-resume-meta {
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.dash-resume-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dash-resume-field {
+  border: 1px solid var(--border);
+  background: rgba(10, 10, 10, 0.42);
+  padding: 0.85rem;
+}
+
+.dash-resume-field-wide {
+  grid-column: 1 / -1;
+}
+
+.dash-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+}
+
+.dash-chip,
+.dash-link-chip {
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.dash-resume-editor-title {
+  margin-bottom: 0.75rem;
+}
+
+.dash-resume-editor-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.dash-resume-input-group {
+  display: grid;
+  gap: 0.45rem;
+  color: var(--muted-foreground);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dash-resume-input-group-wide {
+  grid-column: 1 / -1;
+}
+
+.dash-resume-input,
+.dash-resume-textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  padding: 0.75rem 0.85rem;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.dash-resume-textarea {
+  resize: vertical;
+}
+
+.dash-resume-input:focus,
+.dash-resume-textarea:focus {
+  border-color: var(--foreground);
+}
+
 @media (max-width: 820px) {
   .dash-page {
     grid-template-columns: 1fr;
@@ -419,6 +582,18 @@
   .dash-nav-button {
     justify-content: center;
     text-align: center;
+  }
+
+  .dash-resume-header,
+  .dash-resume-summary-top,
+  .dash-resume-editor-grid,
+  .dash-resume-grid {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .dash-resume-actions {
+    justify-content: flex-start;
   }
 
   .dash-topbar {

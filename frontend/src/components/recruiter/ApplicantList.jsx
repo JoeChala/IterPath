@@ -25,16 +25,14 @@ export default function ApplicantsList({ selectedJob, setSelectedJob }) {
         }
       })
       .catch(() => setError("Could not load jobs"));
-  }, []);
+  }, [selectedJob, setSelectedJob]);
 
   // Fetch applicants when selectedJob changes
   useEffect(() => {
     if (!selectedJob) {
-      setApplicants([]);
       return;
     }
 
-    setError("");
     fetch(`${API_BASE_URL}/api/recruiter/applicants/${selectedJob}`, {
       credentials: "include",
     })
@@ -42,6 +40,7 @@ export default function ApplicantsList({ selectedJob, setSelectedJob }) {
       .then(data => {
         if (Array.isArray(data)) {
           setApplicants(data);
+          setError("");
         } else {
           setApplicants([]);
           setError(data.message || "Could not load applicants");
@@ -76,6 +75,23 @@ export default function ApplicantsList({ selectedJob, setSelectedJob }) {
     const cgpa = app.student?.resumeDetails?.cgpa || 0;
     return cgpa >= parseFloat(minCgpa);
   });
+
+  const visibleApplicants = selectedJob ? filteredApplicants : [];
+
+  const formatList = (value) => {
+    if (Array.isArray(value)) {
+      return value.filter(Boolean);
+    }
+
+    if (typeof value === "string") {
+      return value
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    return [];
+  };
 
   return (
     <section className="recruiter-panel">
@@ -126,7 +142,11 @@ export default function ApplicantsList({ selectedJob, setSelectedJob }) {
           <p className="recruiter-muted-text">No applicants meet the CGPA filter criteria.</p>
         )}
 
-        {filteredApplicants.map(app => (
+        {visibleApplicants.map(app => {
+          const skills = formatList(app.student?.resumeDetails?.skills);
+          const links = formatList(app.student?.resumeDetails?.links);
+
+          return (
           <article key={app._id} className="recruiter-list-item" style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
             <div>
               <h3 className="recruiter-list-title">
@@ -138,31 +158,68 @@ export default function ApplicantsList({ selectedJob, setSelectedJob }) {
               <p className="recruiter-list-meta">Status: <strong style={{ textTransform: "capitalize" }}>{app.status}</strong></p>
             </div>
 
-            {/* Resume Object Details */}
             {(app.student?.resume || app.student?.resumeDetails) && (
-              <div style={{ backgroundColor: "var(--background)", padding: "0.75rem", borderRadius: "6px", fontSize: "0.875rem" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem", fontWeight: "600", color: "var(--primary)" }}>
-                  <FileText size={16} />
-                  Resume Object
-                </div>
-                
-                {app.student.resume && (
-                  <div style={{ marginBottom: "0.5rem" }}>
-                    <strong>Resume Meta:</strong>
-                    <pre style={{ margin: "0.25rem 0 0 0", padding: "0.5rem", background: "rgba(0,0,0,0.05)", borderRadius: "4px", overflowX: "auto" }}>
-                      {JSON.stringify(app.student.resume, null, 2)}
-                    </pre>
-                  </div>
-                )}
-                
-                {app.student.resumeDetails && (
+              <div className="recruiter-resume-card">
+                <div className="recruiter-resume-header">
                   <div>
-                    <strong>Parsed Resume Details:</strong>
-                    <pre style={{ margin: "0.25rem 0 0 0", padding: "0.5rem", background: "rgba(0,0,0,0.05)", borderRadius: "4px", overflowX: "auto", maxHeight: "200px" }}>
-                      {JSON.stringify(app.student.resumeDetails, null, 2)}
-                    </pre>
+                    <p className="recruiter-resume-eyebrow">Resume snapshot</p>
+                    <h4 className="recruiter-resume-title">
+                      {app.student.resume?.fileName || "Uploaded resume"}
+                    </h4>
                   </div>
+                  <FileText size={18} />
+                </div>
+
+                {app.student.resume?.uploadedAt && (
+                  <p className="recruiter-resume-meta">
+                    Uploaded {new Date(app.student.resume.uploadedAt).toLocaleDateString("en-IN", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </p>
                 )}
+
+                <div className="recruiter-resume-grid">
+                  <div className="recruiter-resume-field">
+                    <span className="recruiter-resume-label">Email</span>
+                    <span className="recruiter-resume-value">{app.student.resumeDetails?.email || "Not found"}</span>
+                  </div>
+                  <div className="recruiter-resume-field">
+                    <span className="recruiter-resume-label">Phone</span>
+                    <span className="recruiter-resume-value">{app.student.resumeDetails?.phone || "Not found"}</span>
+                  </div>
+                  <div className="recruiter-resume-field">
+                    <span className="recruiter-resume-label">CGPA</span>
+                    <span className="recruiter-resume-value">{app.student.resumeDetails?.cgpa ?? "Not found"}</span>
+                  </div>
+                  <div className="recruiter-resume-field recruiter-resume-field-wide">
+                    <span className="recruiter-resume-label">Skills</span>
+                    <div className="recruiter-chip-list">
+                      {skills.length ? (
+                        skills.map((skill) => (
+                          <span key={skill} className="recruiter-chip">{skill}</span>
+                        ))
+                      ) : (
+                        <span className="recruiter-resume-value">No skills detected</span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="recruiter-resume-field recruiter-resume-field-wide">
+                    <span className="recruiter-resume-label">Links</span>
+                    <div className="recruiter-chip-list">
+                      {links.length ? (
+                        links.map((link) => (
+                          <a key={link} href={link} target="_blank" rel="noreferrer" className="recruiter-link-chip">
+                            {link}
+                          </a>
+                        ))
+                      ) : (
+                        <span className="recruiter-resume-value">No links detected</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -190,7 +247,8 @@ export default function ApplicantsList({ selectedJob, setSelectedJob }) {
               </button>
             </div>
           </article>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

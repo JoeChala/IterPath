@@ -292,6 +292,90 @@
   margin: 0;
 }
 
+.recruiter-resume-card {
+  border: 1px solid var(--border);
+  background: rgba(10, 10, 10, 0.55);
+  padding: 1rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.recruiter-resume-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.recruiter-resume-eyebrow {
+  margin: 0 0 0.25rem;
+  color: var(--muted-foreground);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.recruiter-resume-title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.recruiter-resume-meta {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.recruiter-resume-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.recruiter-resume-field {
+  border: 1px solid var(--border);
+  background: var(--muted);
+  padding: 0.85rem;
+}
+
+.recruiter-resume-field-wide {
+  grid-column: 1 / -1;
+}
+
+.recruiter-resume-label {
+  display: block;
+  color: var(--muted-foreground);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 0.55rem;
+}
+
+.recruiter-resume-value {
+  color: var(--foreground);
+  font-size: 0.86rem;
+  overflow-wrap: anywhere;
+}
+
+.recruiter-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.recruiter-chip,
+.recruiter-link-chip {
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+  border-radius: 999px;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.72rem;
+  text-decoration: none;
+}
+
 @media (max-width: 820px) {
   .recruiter-dashboard-page {
     grid-template-columns: 1fr;
@@ -327,7 +411,12 @@
   }
 
   .recruiter-stats-grid,
-  .recruiter-form-grid {
+  .recruiter-form-grid,
+  .recruiter-resume-grid {
     grid-template-columns: 1fr;
+  }
+
+  .recruiter-resume-header {
+    flex-direction: column;
   }
 }
